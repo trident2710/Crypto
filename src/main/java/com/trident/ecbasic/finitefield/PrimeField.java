@@ -53,42 +53,62 @@ class PrimeField extends FiniteField{
        
         public PrimeFieldElement(byte[] binaryRepresentation) {
             super(binaryRepresentation);
-        }
-
-        @Override
-        public String toString(){
-            return new BigInteger(getBinaryRepresetation()).toString();
-        }       
+        }  
+        
+        public PrimeFieldElement(String stringRepresentation) {
+            super(stringRepresentation);
+        } 
+        
+        public PrimeFieldElement(BigInteger bi) {
+            super(bi.toByteArray());
+        } 
     }
 
     private class PrimeFieldElementOperator implements FiniteFieldElementOperator<PrimeFieldElement>{
 
         @Override
         public PrimeFieldElement add(PrimeFieldElement el1, PrimeFieldElement el2) {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            return new PrimeFieldElement(el1.add(el2).mod(orderP));
         }
 
         @Override
         public PrimeFieldElement mul(PrimeFieldElement el1, PrimeFieldElement el2) {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            return new PrimeFieldElement(el1.multiply(el2).mod(orderP));
         }
 
         @Override
         public PrimeFieldElement inv(PrimeFieldElement el1) {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            return new PrimeFieldElement(el1.modInverse(orderP));
         }  
+
+        @Override
+        public boolean belongsTo(PrimeFieldElement el1) {
+            return el1.compareTo(orderP)<0;
+        }
+
+        @Override
+        public PrimeFieldElement mod(PrimeFieldElement el1) {
+            return new PrimeFieldElement(el1.mod(orderP));
+        }
     }
     
     private class PrimeFieldElementIterator implements Iterator<PrimeFieldElement>{
 
+        private PrimeFieldElement current;
+        
+        private PrimeFieldElementIterator(){
+            current = new PrimeFieldElement("0");
+        }
         @Override
         public boolean hasNext() {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            return true;
         }
 
         @Override
         public PrimeFieldElement next() {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            PrimeFieldElement res = new PrimeFieldElement(current);
+            current = new PrimeFieldElement(current.add(new BigInteger("1")).mod(orderP));
+            return res;
         }
     }  
 }

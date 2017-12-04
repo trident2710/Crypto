@@ -44,4 +44,19 @@ public interface FiniteFieldElementOperator<T extends FiniteFieldElement>{
      */
     public T inv(T el1);
     
+    /**
+     * find the rest of element which belongs to the field
+     * @param el1
+     * @return 
+     */
+    public T mod(T el1);
+    
+    /**
+     * check if the element belongs to this finite field
+     * @param el1
+     * @return 
+     */
+    public boolean belongsTo(T el1);
+    
+    
 }

@@ -15,19 +15,24 @@
  */
 package com.trident.ecbasic.finitefield;
 
+import java.math.BigInteger;
+
 /**
  * defines the element of the finite field 
  * @author trident
  */
-public abstract class FiniteFieldElement  {
+@SuppressWarnings("serial")
+public abstract class FiniteFieldElement extends BigInteger{
     
-    private final byte[] binaryRepresentation; // element of any finite field can be represented in form of bits
-
     public FiniteFieldElement(byte[] binaryRepresentation){
-        this.binaryRepresentation = binaryRepresentation;
+        super(binaryRepresentation);
     }
     
-    public byte[] getBinaryRepresetation(){
-        return binaryRepresentation;
+    public FiniteFieldElement(String stringNumber){
+        super(stringNumber);
+    }
+    
+    public FiniteFieldElement(BigInteger integer){
+        super(integer.toByteArray());
     }
 }
