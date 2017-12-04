@@ -17,6 +17,7 @@ package com.trident.ecbasic.finitefield;
 
 import java.math.BigInteger;
 import java.util.Iterator;
+import java.util.Random;
 
 /**
  * defines prime field
@@ -111,4 +112,9 @@ class PrimeField extends FiniteField{
             return res;
         }
     }  
+    
+    @Override
+    public String toString(){
+        return "Prime field over "+orderP;
+    }
 }
