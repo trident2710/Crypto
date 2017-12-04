@@ -28,7 +28,7 @@ import java.util.Iterator;
 public class BinaryExtensionField extends FiniteField {
     
     private final int  orderQ; // order exponent
-    private final IrreduciblePoly irreduciblePoly;
+    private final IrreduciblePoly irreduciblePoly; // irreducible polynom
     private final BinaryExtensionFieldElementIterator iterator;
     private final BinaryExtensionFieldElementOperator operator;
     
@@ -53,13 +53,28 @@ public class BinaryExtensionField extends FiniteField {
         return irreduciblePoly;
     }
     
+    /**
+     * provides arithmetic operations for the binary field
+     */
     private final class BinaryExtensionFieldElementOperator implements FiniteFieldElementOperator<BinaryExtensionFieldElement>{
         
+        /**
+         * 
+         * @param el1
+         * @param el2
+         * @return  el1 + el2 mod irreducible poly
+         */
         @Override
         public BinaryExtensionFieldElement add(BinaryExtensionFieldElement el1, BinaryExtensionFieldElement el2) {
-            return new BinaryExtensionFieldElement(mod(el1).xor(mod(el2)).toByteArray());
+            return mod(new BinaryExtensionFieldElement(el1.xor(el2).toByteArray()));
         }
 
+        /**
+         * 
+         * @param el1
+         * @param el2
+         * @return el1 * el2 mod irreducible poly
+         */
         @Override
         public BinaryExtensionFieldElement mul(BinaryExtensionFieldElement el1, BinaryExtensionFieldElement el2) {
             BigInteger product = new BigInteger("0");
@@ -72,6 +87,11 @@ public class BinaryExtensionField extends FiniteField {
             return divEuclid(new BinaryExtensionFieldElement(product.toByteArray()),irreduciblePoly).getK();
         }
 
+        /**
+         * finds the inverse of el1 in this field. i.e. t*el1 = 1 mod irreducible poly
+         * @param el1
+         * @return inverse of el1
+         */
         @Override
         public BinaryExtensionFieldElement inv(BinaryExtensionFieldElement el1) {
             BinaryExtensionFieldElement t = new BinaryExtensionFieldElement("0");
@@ -81,10 +101,7 @@ public class BinaryExtensionField extends FiniteField {
             BinaryExtensionFieldElement q;
             
             while (nr.compareTo(ZERO)>0) {      
-                System.out.println(r);
-                System.out.println(nr);
                 q = divEuclid(r,nr).getV();
-                //System.out.println(q);
                 BinaryExtensionFieldElement tmp = new BinaryExtensionFieldElement(t);
                 t = new BinaryExtensionFieldElement(nt);
                 nt = add(tmp, mul(q, nt));
@@ -97,10 +114,10 @@ public class BinaryExtensionField extends FiniteField {
         }  
             
         /**
-         * 
-         * @param el1
+         * division using Euclid algorithm
+         * @param a
          * @param b
-         * @return first - mod second - div
+         * @return K ->  a mod b,  V -> a div b
          */
         private Tuple<BinaryExtensionFieldElement,BinaryExtensionFieldElement> divEuclid(BinaryExtensionFieldElement a,BinaryExtensionFieldElement b){
             if(b.compareTo(ZERO)==0) throw new RuntimeException("cannot div by zero");
@@ -119,11 +136,20 @@ public class BinaryExtensionField extends FiniteField {
             return new Tuple<>(rst,q);
         }
 
+        /**
+         * 
+         * @param el1
+         * @return whether el1 belongs to this field
+         */
         @Override
         public boolean belongsTo(BinaryExtensionFieldElement el1) {
             return el1.getDegree()<irreduciblePoly.getDegree();
         }
 
+        /**
+         * @param el1 finite field element
+         * @return el1 mod irreducible poly
+         */
         @Override
         public BinaryExtensionFieldElement mod(BinaryExtensionFieldElement el1) {
             return divEuclid(el1, irreduciblePoly).getK();
@@ -131,6 +157,10 @@ public class BinaryExtensionField extends FiniteField {
         
     }
     
+    /**
+     * iterates through the elements of this field
+     * Be careful because this iterator is infinite because fields are enclosed
+     */
     private final class BinaryExtensionFieldElementIterator implements Iterator<BinaryExtensionFieldElement>{
         
         private BinaryExtensionFieldElement current;

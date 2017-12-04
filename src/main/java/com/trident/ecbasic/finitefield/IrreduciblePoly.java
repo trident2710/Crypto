@@ -65,14 +65,11 @@ public final class IrreduciblePoly  extends BinaryExtensionFieldElement{
         super(ByteBuffer.allocate(8).putLong(longValue).array());
     }
     
+    /**
+     * get the list of predefined irreducible polys of each degree up to 32
+     * @return 
+     */
     public static final IrreduciblePoly[] getPredefined(){
         return PREDEFINED_POLYS;
     }
-    
-//    public static void main(String[] args) {
-//        for(IrreduciblePoly p: getPredefined()){
-//            System.out.println(p.getDegree());
-//        }
-//    }
-    
 }
