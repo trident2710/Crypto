@@ -22,7 +22,7 @@ import java.util.Iterator;
  * defines prime field
  * @author trident
  */
-class PrimeField extends FiniteField<PrimeFieldElement>{
+public class PrimeField extends FiniteField<PrimeFieldElement>{
     
     private final PrimeFieldElementIterator iterator;
     private final PrimeFieldElementOperator operator;
