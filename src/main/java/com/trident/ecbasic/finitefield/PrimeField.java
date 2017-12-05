@@ -17,7 +17,6 @@ package com.trident.ecbasic.finitefield;
 
 import java.math.BigInteger;
 import java.util.Iterator;
-import java.util.Random;
 
 /**
  * defines prime field
@@ -28,7 +27,9 @@ class PrimeField extends FiniteField{
     private final PrimeFieldElementIterator iterator;
     private final PrimeFieldElementOperator operator;
 
-    
+    /**
+     * @param orderP should be prime
+     */
     public PrimeField(BigInteger orderP) {
         super(orderP);
         this.iterator = new PrimeFieldElementIterator();
@@ -100,6 +101,7 @@ class PrimeField extends FiniteField{
         private PrimeFieldElementIterator(){
             current = new PrimeFieldElement("0");
         }
+        
         @Override
         public boolean hasNext() {
             return true;
