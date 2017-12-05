@@ -22,7 +22,7 @@ import java.util.Iterator;
  * defines prime field
  * @author trident
  */
-class PrimeField extends FiniteField{
+class PrimeField extends FiniteField<PrimeFieldElement>{
     
     private final PrimeFieldElementIterator iterator;
     private final PrimeFieldElementOperator operator;
@@ -51,21 +51,6 @@ class PrimeField extends FiniteField{
         return operator;
     }
     
-    private static class PrimeFieldElement extends FiniteFieldElement{
-       
-        public PrimeFieldElement(byte[] binaryRepresentation) {
-            super(binaryRepresentation);
-        }  
-        
-        public PrimeFieldElement(String stringRepresentation) {
-            super(stringRepresentation);
-        } 
-        
-        public PrimeFieldElement(BigInteger bi) {
-            super(bi.toByteArray());
-        } 
-    }
-
     private class PrimeFieldElementOperator implements FiniteFieldElementOperator<PrimeFieldElement>{
 
         @Override

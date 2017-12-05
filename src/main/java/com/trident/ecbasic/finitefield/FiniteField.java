@@ -22,7 +22,7 @@ import java.util.Iterator;
  * defines the Galois field 
  * @author trident
  */
-public abstract class FiniteField {
+public abstract class FiniteField<T extends FiniteFieldElement> {
     
     protected final BigInteger orderP; // prime order
     protected final BigInteger size; // how many elements are in this finite field
@@ -58,12 +58,12 @@ public abstract class FiniteField {
      * get iterator through elements of field
      * @return 
      */
-    public abstract Iterator<? extends FiniteFieldElement> getIterator();
+    public abstract Iterator<T> getIterator();
     
     /**
      * get operator to perform the arithmetic operations between finite field elements
      * @return 
      */
-    public abstract FiniteFieldElementOperator<? extends FiniteFieldElement> getOperator();
+    public abstract FiniteFieldElementOperator<T> getOperator();
     
 }

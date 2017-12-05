@@ -25,7 +25,7 @@ import java.util.Iterator;
  * defines binary extension field
  * @author trident
  */
-public class BinaryExtensionField extends FiniteField {
+public class BinaryExtensionField extends FiniteField<BinaryExtensionFieldElement> {
     
     private final int  orderQ; // order exponent
     private final IrreduciblePoly irreduciblePoly; // irreducible polynom
@@ -195,7 +195,5 @@ public class BinaryExtensionField extends FiniteField {
     @Override
     public String toString(){
         return "Binary extension field over "+orderP+"^"+orderQ+" with irreductible poly "+irreduciblePoly;
-    }
-    
-      
+    }    
 }
