@@ -37,7 +37,6 @@ public abstract class EllipticCurvePointOperator<T extends FiniteField<K>, K ext
      * @return the point p3 = p1 + p2 which also belongs to the elliptic curve
      */
     public P add(P p1, P p2){
-        
         // if one of coordinates is the same
         if(Math.abs(p1.compareTo(p2))<1) return doub(p1);
             
@@ -59,12 +58,26 @@ public abstract class EllipticCurvePointOperator<T extends FiniteField<K>, K ext
      * @return Q = k*P
      */
     public P mul(BigInteger times, P p1){
-        P temp = curve.createPoint(p1.getPointX(), p1.getPointY());
-        while (times.compareTo(BigInteger.ZERO)>0) {   
-            temp = add(temp, p1);
+        if(times.compareTo(BigInteger.ZERO) == 0)
+            throw new RuntimeException("multiply to zero");
+        
+        if(times.compareTo(BigInteger.ONE) == 0)
+            return p1;
+        
+        boolean isOdd = times.testBit(0);
+        
+        if(isOdd){
             times = times.subtract(BigInteger.ONE);
         }
-        return temp;
+        
+        P tmp = getCurve().createPoint(p1.getPointX(), p1.getPointY());
+        // while times is bigger than 1
+        while (times.compareTo(BigInteger.ONE)>0) {   
+            tmp = doub(tmp);
+            times.shiftRight(1); // times = times/2
+        }
+        
+        return isOdd?add(tmp, p1):tmp;
     }
     
     /**
