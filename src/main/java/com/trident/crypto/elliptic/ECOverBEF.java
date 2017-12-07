@@ -1,0 +1,60 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package com.trident.crypto.elliptic;
+
+import com.trident.crypto.finitefield.BinaryExtensionField;
+import com.trident.crypto.finitefield.BinaryExtensionField.BinaryExtensionFieldElementOperator;
+import com.trident.crypto.finitefield.BinaryExtensionFieldElement;
+import java.math.BigInteger;
+
+/**
+ *
+ * @author trident
+ */
+public class ECOverBEF extends EllipticCurve<BinaryExtensionField, BinaryExtensionFieldElement, ECPOverBEF>{
+
+    private final ECOverBEFOperator operator;
+    
+    public ECOverBEF(BinaryExtensionField field, BinaryExtensionFieldElement a, BinaryExtensionFieldElement b, ECPOverBEF G, BigInteger n, BigInteger h) {
+        super(field, a, b, G, n, h);
+        operator = new ECOverBEFOperator(this);
+    }
+
+    @Override
+    public ECPOverBEF createPoint(BinaryExtensionFieldElement x, BinaryExtensionFieldElement y) {
+        return new ECPOverBEF(x, y);
+    }
+    
+    private static class ECOverBEFOperator extends EllipticCurvePointOperator<BinaryExtensionField, BinaryExtensionFieldElement, ECPOverBEF>{
+
+        public ECOverBEFOperator(EllipticCurve<BinaryExtensionField, BinaryExtensionFieldElement, ECPOverBEF> curve) {
+            super(curve);
+        }
+
+        @Override
+        public boolean belongsTo(ECPOverBEF el1) {
+            BinaryExtensionFieldElementOperator op = getCurve().getField().getOperator();
+            BinaryExtensionFieldElement y2  = op.mul(el1.getPointY(), el1.getPointY());
+            BinaryExtensionFieldElement xy  = op.mul(el1.getPointY(), el1.getPointX());
+            BinaryExtensionFieldElement x3  = op.mul(el1.getPointX(), op.mul(el1.getPointX(), el1.getPointX()));
+            BinaryExtensionFieldElement ax2  = op.mul(op.mul(el1.getPointX(), getCurve().getA()),el1.getPointX());
+            return op.add(y2,xy).compareTo(op.add(op.add(x3, ax2),getCurve().getB()))==0;
+        }
+        
+    }
+
+    @Override
+    public EllipticCurvePointOperator<BinaryExtensionField, BinaryExtensionFieldElement, ECPOverBEF> getOperator() {
+        return operator;
+    }
+    
+    @Override
+    public String toString(){
+        StringBuilder b = new StringBuilder();
+        b.append("Elliptic curve defined over field '").append(field).append("' with parameters:\n").append(super.toString());
+        return b.toString();
+    }
+}
