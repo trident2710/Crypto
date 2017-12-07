@@ -13,26 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.trident.ecbasic.finitefield;
-
-import java.math.BigInteger;
+package com.trident.crypto.finitefield.util;
 
 /**
- *
+ * basic tuple class
  * @author trident
+ * @param <K>
+ * @param <V>
  */
-@SuppressWarnings("serial")
-public class PrimeFieldElement extends FiniteFieldElement{
-       
-    public PrimeFieldElement(byte[] binaryRepresentation) {
-        super(binaryRepresentation);
-    }  
+public class Tuple<K,V> {
+    private final K k;
+    private final V v;
 
-    public PrimeFieldElement(String stringRepresentation) {
-        super(stringRepresentation);
-    } 
+    public Tuple(K k, V v) {
+        this.k = k;
+        this.v = v;
+    }
 
-    public PrimeFieldElement(BigInteger bi) {
-        super(bi.toByteArray());
-    } 
+    public K getK() {
+        return k;
+    }
+
+    public V getV() {
+        return v;
+    }
+    
+    
 }

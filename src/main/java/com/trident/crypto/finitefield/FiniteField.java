@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.trident.ecbasic.finitefield;
+package com.trident.crypto.finitefield;
 
 import java.math.BigInteger;
 import java.util.Iterator;
@@ -21,8 +21,9 @@ import java.util.Iterator;
 /**
  * defines the Galois field 
  * @author trident
+ * @param <T>
  */
-public abstract class FiniteField<T extends FiniteFieldElement> {
+public abstract class FiniteField<T extends FiniteFieldElement> implements FiniteFieldElementFactory<T>{
     
     protected final BigInteger orderP; // prime order
     protected final BigInteger size; // how many elements are in this finite field
@@ -64,6 +65,5 @@ public abstract class FiniteField<T extends FiniteFieldElement> {
      * get operator to perform the arithmetic operations between finite field elements
      * @return 
      */
-    public abstract FiniteFieldElementOperator<T> getOperator();
-    
+    public abstract FiniteFieldElementOperator<T> getOperator();  
 }

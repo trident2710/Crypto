@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.trident.ecbasic.finitefield;
+package com.trident.crypto.finitefield;
 
 /**
  *
@@ -28,6 +28,14 @@ public interface FiniteFieldElementOperator<T extends FiniteFieldElement>{
      * @return sum of elements
      */
     public T add(T el1, T el2);
+    
+    /**
+     * subtract two finite field elements
+     * @param el1
+     * @param el2
+     * @return 
+     */
+    public T sub(T el1, T el2);
     
     /**
      * multiply finite field elements
@@ -49,14 +57,6 @@ public interface FiniteFieldElementOperator<T extends FiniteFieldElement>{
      * @param el1
      * @return 
      */
-    public T mod(T el1);
-    
-    /**
-     * check if the element belongs to this finite field
-     * @param el1
-     * @return 
-     */
-    public boolean belongsTo(T el1);
-    
+    public T mod(T el1); 
     
 }

@@ -13,16 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.trident.ecbasic.finitefield.exception;
+package com.trident.crypto.finitefield;
+
+import java.math.BigInteger;
 
 /**
  *
  * @author trident
  */
-public class ElementOutOfFiniteFieldException  extends RuntimeException{
-    private static final long serialVersionUID = 1L;
-    public ElementOutOfFiniteFieldException(){
-        super("The provided element is out of finite field");
-    }
-    
+public interface FiniteFieldElementFactory<T extends FiniteFieldElement>{
+    T create(BigInteger val);
 }

@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.trident.ecbasic.finitefield;
+package com.trident.crypto.finitefield;
 
-import com.trident.ecbasic.finitefield.util.Tuple;
+import com.trident.crypto.finitefield.util.Tuple;
 import java.math.BigInteger;
 import static java.math.BigInteger.ZERO;
 import java.util.BitSet;
@@ -52,11 +52,16 @@ public class BinaryExtensionField extends FiniteField<BinaryExtensionFieldElemen
     public IrreduciblePoly getIrreduciblePoly() {
         return irreduciblePoly;
     }
+
+    @Override
+    public BinaryExtensionFieldElement create(BigInteger val) {
+        return operator.mod(new BinaryExtensionFieldElement(val));
+    }
     
     /**
      * provides arithmetic operations for the binary field
      */
-    private final class BinaryExtensionFieldElementOperator implements FiniteFieldElementOperator<BinaryExtensionFieldElement>{
+    public final class BinaryExtensionFieldElementOperator implements FiniteFieldElementOperator<BinaryExtensionFieldElement>{
         
         /**
          * 
@@ -137,16 +142,6 @@ public class BinaryExtensionField extends FiniteField<BinaryExtensionFieldElemen
         }
 
         /**
-         * 
-         * @param el1
-         * @return whether el1 belongs to this field
-         */
-        @Override
-        public boolean belongsTo(BinaryExtensionFieldElement el1) {
-            return el1.getDegree()<irreduciblePoly.getDegree();
-        }
-
-        /**
          * @param el1 finite field element
          * @return el1 mod irreducible poly
          */
@@ -154,14 +149,18 @@ public class BinaryExtensionField extends FiniteField<BinaryExtensionFieldElemen
         public BinaryExtensionFieldElement mod(BinaryExtensionFieldElement el1) {
             return divEuclid(el1, irreduciblePoly).getK();
         }
-        
+
+        @Override
+        public BinaryExtensionFieldElement sub(BinaryExtensionFieldElement el1, BinaryExtensionFieldElement el2) {
+            return add(el1, el2);
+        }        
     }
     
     /**
      * iterates through the elements of this field
      * Be careful because this iterator is infinite because fields are enclosed
      */
-    private final class BinaryExtensionFieldElementIterator implements Iterator<BinaryExtensionFieldElement>{
+    public final class BinaryExtensionFieldElementIterator implements Iterator<BinaryExtensionFieldElement>{
         
         private BinaryExtensionFieldElement current;
         

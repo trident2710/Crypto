@@ -13,30 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.trident.ecbasic.finitefield.util;
+package com.trident.crypto.finitefield.exception;
 
 /**
- * basic tuple class
+ *
  * @author trident
- * @param <K>
- * @param <V>
  */
-public class Tuple<K,V> {
-    private final K k;
-    private final V v;
-
-    public Tuple(K k, V v) {
-        this.k = k;
-        this.v = v;
+public class ElementOutOfFiniteFieldException  extends RuntimeException{
+    private static final long serialVersionUID = 1L;
+    public ElementOutOfFiniteFieldException(){
+        super("The provided element is out of finite field");
     }
-
-    public K getK() {
-        return k;
-    }
-
-    public V getV() {
-        return v;
-    }
-    
     
 }

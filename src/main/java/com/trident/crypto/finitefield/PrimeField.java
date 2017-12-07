@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.trident.ecbasic.finitefield;
+package com.trident.crypto.finitefield;
 
 import java.math.BigInteger;
 import java.util.Iterator;
@@ -50,8 +50,13 @@ public class PrimeField extends FiniteField<PrimeFieldElement>{
     public PrimeFieldElementOperator getOperator() {
         return operator;
     }
+
+    @Override
+    public PrimeFieldElement create(BigInteger val) {
+        return operator.mod(new PrimeFieldElement(val));
+    }
     
-    private class PrimeFieldElementOperator implements FiniteFieldElementOperator<PrimeFieldElement>{
+    public class PrimeFieldElementOperator implements FiniteFieldElementOperator<PrimeFieldElement>{
 
         @Override
         public PrimeFieldElement add(PrimeFieldElement el1, PrimeFieldElement el2) {
@@ -69,17 +74,17 @@ public class PrimeField extends FiniteField<PrimeFieldElement>{
         }  
 
         @Override
-        public boolean belongsTo(PrimeFieldElement el1) {
-            return el1.compareTo(orderP)<0;
-        }
-
-        @Override
         public PrimeFieldElement mod(PrimeFieldElement el1) {
             return new PrimeFieldElement(el1.mod(orderP));
         }
+
+        @Override
+        public PrimeFieldElement sub(PrimeFieldElement el1, PrimeFieldElement el2) {
+            return new PrimeFieldElement(el1.subtract(el2).mod(orderP));
+        }
     }
     
-    private class PrimeFieldElementIterator implements Iterator<PrimeFieldElement>{
+    public class PrimeFieldElementIterator implements Iterator<PrimeFieldElement>{
 
         private PrimeFieldElement current;
         
