@@ -11,7 +11,8 @@ import com.trident.crypto.finitefield.BinaryExtensionFieldElement;
 import java.math.BigInteger;
 
 /**
- *
+ * defines elliptic curve over prime field i.e. GF(2^m)
+ * with the equation y^2 + xy = x^3 + ax^2 + b
  * @author trident
  */
 public class ECOverBEF extends EllipticCurve<BinaryExtensionField, BinaryExtensionFieldElement, ECPOverBEF>{
@@ -34,6 +35,12 @@ public class ECOverBEF extends EllipticCurve<BinaryExtensionField, BinaryExtensi
             super(curve);
         }
 
+        /**
+         * checks if the coordinates of the point satisfy the equation
+         * y^2 + xy = x^3 + ax^2 + b
+         * @param el1 - point of the elliptic curve
+         * @return satisfy of not
+         */
         @Override
         public boolean belongsTo(ECPOverBEF el1) {
             BinaryExtensionFieldElementOperator op = getCurve().getField().getOperator();
@@ -42,8 +49,7 @@ public class ECOverBEF extends EllipticCurve<BinaryExtensionField, BinaryExtensi
             BinaryExtensionFieldElement x3  = op.mul(el1.getPointX(), op.mul(el1.getPointX(), el1.getPointX()));
             BinaryExtensionFieldElement ax2  = op.mul(op.mul(el1.getPointX(), getCurve().getA()),el1.getPointX());
             return op.add(y2,xy).compareTo(op.add(op.add(x3, ax2),getCurve().getB()))==0;
-        }
-        
+        } 
     }
 
     @Override

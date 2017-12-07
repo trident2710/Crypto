@@ -6,7 +6,6 @@
 package com.trident.crypto.elliptic;
 
 import com.trident.crypto.finitefield.FiniteFieldElement;
-import com.trident.crypto.finitefield.PrimeFieldElement;
 
 /**
  * point on the elliptic curve with the coordinates over finite field
@@ -14,7 +13,14 @@ import com.trident.crypto.finitefield.PrimeFieldElement;
  * @param <T> - type of finite field element
  */
 public abstract class EllipticCurvePoint<T extends FiniteFieldElement> implements Comparable<EllipticCurvePoint<T>>{
+    /**
+     * X coordinate of the point
+     */
     private final T pointX;
+    
+    /**
+     * Y coordinate of the point
+     */
     private final T pointY;
 
     public EllipticCurvePoint(T pointX, T pointY) {
@@ -39,6 +45,13 @@ public abstract class EllipticCurvePoint<T extends FiniteFieldElement> implement
         return "X:"+pointX+"; Y:"+pointY;
     }
     
+    /**
+     * compares the coordinates of 2 points of the elliptic curve
+     * @param o - point which this point is compared with
+     * @return 0 if they have the same coordinates
+     *         +-1 if they have one same coordinate
+     *         +-2 if they have different coordinates
+     */
     @Override
     public int compareTo(EllipticCurvePoint<T> o) {
         return o.getPointX().compareTo(this.getPointX())+o.getPointY().compareTo(o.getPointY());

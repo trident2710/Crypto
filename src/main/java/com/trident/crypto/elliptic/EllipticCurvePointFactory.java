@@ -8,11 +8,17 @@ package com.trident.crypto.elliptic;
 import com.trident.crypto.finitefield.FiniteFieldElement;
 
 /**
- *
+ * factory interface to yield the elliptic curve point from 2 coordinates which belong to the finite field
  * @author trident
- * @param <K>
- * @param <P>
+ * @param <K> - finite field which the coordinates belong to
+ * @param <P> - type of the elliptic curve point to yield
  */
 public interface EllipticCurvePointFactory<K extends FiniteFieldElement, P extends EllipticCurvePoint<K>>{
+    /**
+     * creates the instance of EllipticCurvePoint from 2 coordinates
+     * @param x
+     * @param y
+     * @return 
+     */
     P createPoint(K x, K y);
 }

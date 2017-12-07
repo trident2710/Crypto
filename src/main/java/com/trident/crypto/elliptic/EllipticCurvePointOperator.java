@@ -13,26 +13,31 @@ import java.math.BigInteger;
 
 
 /**
- *
+ * performs arithmetic operations with the points of the elliptic curve defined over finite field
  * @author trident
- * @param <T>
- * @param <K>
- * @param <P>
+ * @param <T> - type of the finite field over which the elliptic curve is defined
+ * @param <K> - type of the element of this finite field
+ * @param <P> - type of the point of this elliptic curve
  */
 public abstract class EllipticCurvePointOperator<T extends FiniteField<K>, K extends FiniteFieldElement, P extends EllipticCurvePoint<K>> {
     
+    /**
+     * elliptic curve over which the arithmetic operations are performed
+     */
     protected final EllipticCurve<T,K,P> curve;
     
     public EllipticCurvePointOperator(EllipticCurve<T,K,P> curve){
         this.curve = curve;
     }
+    
     /**
-     * add two points
+     * add two elliptic curve points
      * @param p1
      * @param p2
-     * @return sum of elements
+     * @return the point p3 = p1 + p2 which also belongs to the elliptic curve
      */
     public P add(P p1, P p2){
+        
         // if one of coordinates is the same
         if(Math.abs(p1.compareTo(p2))<1) return doub(p1);
             
@@ -46,10 +51,12 @@ public abstract class EllipticCurvePointOperator<T extends FiniteField<K>, K ext
     }
     
     /**
-     * multiply two points
-     * @param times
-     * @param p1
-     * @return multiple of elements
+     * multiply elliptic curve point to the number
+     * in fact add point k times to itself
+     * i.e. Q = k*P
+     * @param times - number k in k*P
+     * @param p1 - point P in k*P
+     * @return Q = k*P
      */
     public P mul(BigInteger times, P p1){
         P temp = curve.createPoint(p1.getPointX(), p1.getPointY());
@@ -62,12 +69,18 @@ public abstract class EllipticCurvePointOperator<T extends FiniteField<K>, K ext
     
     /**
      * check if the point belongs to this curve
-     * @param el1
-     * @return 
+     * by putting it's coordinates to the curve equation
+     * @param el1 - point of the elliptic curve
+     * @return belongs or not
      */
     public abstract boolean belongsTo(P el1);
     
-    
+    /**
+     * double provided point,
+     * i.e. calculate Q = 2*P;
+     * @param p1 - point of the elliptic curve
+     * @return Q = 2*P
+     */
     public P doub(P p1){
         FiniteFieldElementOperator<K> o = curve.getField().getOperator();
         K dy = o.add(o.mul(o.mul(curve.getField().create(new BigInteger("3")),p1.getPointX()),p1.getPointX()),curve.getA());
@@ -78,6 +91,10 @@ public abstract class EllipticCurvePointOperator<T extends FiniteField<K>, K ext
         return curve.createPoint(p3x, p3y);
     }
 
+    /**
+     * get the elliptic curve over which this operator is defined
+     * @return 
+     */
     public EllipticCurve<T, K, P> getCurve() {
         return curve;
     }

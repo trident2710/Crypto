@@ -8,7 +8,7 @@ package com.trident.crypto.elliptic;
 import com.trident.crypto.finitefield.BinaryExtensionFieldElement;
 
 /**
- *
+ * point of the elliptic curve defined over binary extension field i.e GF(2^m)
  * @author trident
  */
 public class ECPOverBEF extends EllipticCurvePoint<BinaryExtensionFieldElement>{

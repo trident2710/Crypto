@@ -8,7 +8,7 @@ package com.trident.crypto.elliptic;
 import com.trident.crypto.finitefield.PrimeFieldElement;
 
 /**
- *
+ * point of the elliptic curve defined over prime field i.e. GF(2^p)
  * @author trident
  */
 public class ECPOverPF extends EllipticCurvePoint<PrimeFieldElement>{

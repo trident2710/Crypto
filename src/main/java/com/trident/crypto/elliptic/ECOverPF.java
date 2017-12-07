@@ -11,7 +11,8 @@ import com.trident.crypto.finitefield.PrimeFieldElement;
 import java.math.BigInteger;
 
 /**
- * defines elliptic curve over prime field
+ * defines elliptic curve over prime field i.e. GF(p)
+ * with the equation y^2 = x^3 + ax + b
  * @author trident
  */
 public class ECOverPF extends EllipticCurve<PrimeField, PrimeFieldElement, ECPOverPF>{

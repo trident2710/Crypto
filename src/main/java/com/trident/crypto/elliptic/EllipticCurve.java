@@ -25,12 +25,29 @@ public abstract class EllipticCurve<T extends FiniteField<K>, K extends FiniteFi
     protected final T field;
     
     /**
-     * parameter a of the curve equation ( which is different for the curves defined over different fields)
+     * parameter a of the curve equation 
+     * @see http://www.secg.org/SEC2-Ver-1.0.pdf
      */
     private final K a;
+    /**
+     * parameter b of the curve equation 
+     * @see http://www.secg.org/SEC2-Ver-1.0.pdf
+     */
     private final K b;
+    /**
+     * point on the curve with high order
+     * @see http://www.secg.org/SEC2-Ver-1.0.pdf
+     */
     private final P G;
+    /**
+     * order of the point G
+     * @see http://www.secg.org/SEC2-Ver-1.0.pdf
+     */
     private final BigInteger n;
+    /**
+     * cofactor - relation between number of points of curve and order of point G
+     * @see http://www.secg.org/SEC2-Ver-1.0.pdf
+     */
     private final BigInteger h;
 
     public EllipticCurve(T field, K a, K b, P G, BigInteger n, BigInteger h) {
