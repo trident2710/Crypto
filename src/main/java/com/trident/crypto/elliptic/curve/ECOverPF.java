@@ -3,11 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.trident.crypto.elliptic;
+package com.trident.crypto.elliptic.curve;
 
-import com.trident.crypto.finitefield.PrimeField;
-import com.trident.crypto.finitefield.PrimeField.PrimeFieldElementOperator;
-import com.trident.crypto.finitefield.PrimeFieldElement;
+import com.trident.crypto.elliptic.point.ECPOverPF;
+import com.trident.crypto.elliptic.point.EllipticCurvePointOperator;
+import com.trident.crypto.finitefield.field.PrimeField;
+import com.trident.crypto.finitefield.element.PrimeFieldElement;
+import com.trident.crypto.finitefield.element.FiniteFieldElementOperator;
 import java.math.BigInteger;
 
 /**
@@ -19,7 +21,7 @@ public class ECOverPF extends EllipticCurve<PrimeField, PrimeFieldElement, ECPOv
 
     private final ECOverPFOperator operator;
     
-    public ECOverPF(PrimeField field, PrimeFieldElement a, PrimeFieldElement b, ECPOverPF G, BigInteger n, BigInteger h) {
+    ECOverPF(PrimeField field, PrimeFieldElement a, PrimeFieldElement b, ECPOverPF G, BigInteger n, BigInteger h) {
         super(field, a, b, G, n, h);
         this.operator = new ECOverPFOperator(this);
     }
@@ -37,7 +39,7 @@ public class ECOverPF extends EllipticCurve<PrimeField, PrimeFieldElement, ECPOv
 
         @Override
         public boolean belongsTo(ECPOverPF el1) {
-            PrimeFieldElementOperator op = getCurve().getField().getOperator();
+            FiniteFieldElementOperator<PrimeFieldElement> op = getCurve().getField().getOperator();
             PrimeFieldElement y2  = op.mul(el1.getPointY(), el1.getPointY());
             PrimeFieldElement x3  = op.mul(el1.getPointX(), op.mul(el1.getPointX(), el1.getPointX()));
             PrimeFieldElement ax  = op.mul(el1.getPointX(), getCurve().getA());

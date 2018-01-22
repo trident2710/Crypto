@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.trident.crypto.elliptic;
+package com.trident.crypto.elliptic.point;
 
-import com.trident.crypto.finitefield.PrimeFieldElement;
+import com.trident.crypto.finitefield.element.PrimeFieldElement;
 
 /**
  * point of the elliptic curve defined over prime field i.e. GF(2^p)

@@ -3,10 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.trident.crypto.elliptic;
+package com.trident.crypto.elliptic.curve;
 
-import com.trident.crypto.finitefield.FiniteField;
-import com.trident.crypto.finitefield.FiniteFieldElement;
+import com.trident.crypto.elliptic.point.EllipticCurvePoint;
+import com.trident.crypto.elliptic.point.EllipticCurvePointFactory;
+import com.trident.crypto.elliptic.point.EllipticCurvePointOperator;
+import com.trident.crypto.finitefield.field.FiniteField;
+import com.trident.crypto.finitefield.element.FiniteFieldElement;
 import java.math.BigInteger;
 
 /**
@@ -110,4 +113,5 @@ public abstract class EllipticCurve<T extends FiniteField<K>, K extends FiniteFi
                 .append("\n");      
         return b.toString();
     }
+    
 }

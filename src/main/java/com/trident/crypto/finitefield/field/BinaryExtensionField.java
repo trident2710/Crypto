@@ -13,11 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.trident.crypto.finitefield;
+package com.trident.crypto.finitefield.field;
 
+import com.trident.crypto.finitefield.element.FiniteFieldElementOperator;
+import com.trident.crypto.finitefield.element.IrreduciblePoly;
+import com.trident.crypto.finitefield.element.BinaryExtensionFieldElement;
+import com.trident.crypto.finitefield.element.BinaryExtensionFieldElementFactory;
 import com.trident.crypto.finitefield.util.Tuple;
 import java.math.BigInteger;
-import static java.math.BigInteger.ZERO;
 import java.util.BitSet;
 import java.util.Iterator;
 
@@ -29,14 +32,10 @@ public class BinaryExtensionField extends FiniteField<BinaryExtensionFieldElemen
     
     private final int  orderQ; // order exponent
     private final IrreduciblePoly irreduciblePoly; // irreducible polynom
-    private final BinaryExtensionFieldElementIterator iterator;
-    private final BinaryExtensionFieldElementOperator operator;
     
-    public BinaryExtensionField(int orderQ, IrreduciblePoly irreduciblePoly){
-        super(new BigInteger("2"),new BigInteger("2").pow(orderQ));
+    private BinaryExtensionField(int orderQ, IrreduciblePoly irreduciblePoly, BinaryExtensionFieldElementIterator iterator, BinaryExtensionFieldElementOperator operator, BinaryExtensionFieldElementFactory elementFactory){
+        super(new BigInteger("2"),new BigInteger("2").pow(orderQ),iterator,operator, elementFactory);
         this.orderQ = orderQ;
-        this.iterator = new BinaryExtensionFieldElementIterator();
-        this.operator = new BinaryExtensionFieldElementOperator();
         this.irreduciblePoly = irreduciblePoly;
     }
 
@@ -52,16 +51,11 @@ public class BinaryExtensionField extends FiniteField<BinaryExtensionFieldElemen
     public IrreduciblePoly getIrreduciblePoly() {
         return irreduciblePoly;
     }
-
-    @Override
-    public BinaryExtensionFieldElement create(BigInteger val) {
-        return operator.mod(new BinaryExtensionFieldElement(val));
-    }
     
     /**
      * provides arithmetic operations for the binary field
      */
-    public final class BinaryExtensionFieldElementOperator implements FiniteFieldElementOperator<BinaryExtensionFieldElement>{
+    private class BinaryExtensionFieldElementOperator implements FiniteFieldElementOperator<BinaryExtensionFieldElement>{
         
         /**
          * 
@@ -71,7 +65,7 @@ public class BinaryExtensionField extends FiniteField<BinaryExtensionFieldElemen
          */
         @Override
         public BinaryExtensionFieldElement add(BinaryExtensionFieldElement el1, BinaryExtensionFieldElement el2) {
-            return mod(new BinaryExtensionFieldElement(el1.xor(el2).toByteArray()));
+            return mod(getElementFactory().create(el1.xor(el2)));
         }
 
         /**
@@ -82,14 +76,14 @@ public class BinaryExtensionField extends FiniteField<BinaryExtensionFieldElemen
          */
         @Override
         public BinaryExtensionFieldElement mul(BinaryExtensionFieldElement el1, BinaryExtensionFieldElement el2) {
-            BigInteger product = new BigInteger("0");
+            BigInteger product = BigInteger.ZERO;
             byte[] el1b = mod(el1).toByteArray();
             BitSet el1s = BitSet.valueOf(el1b);
             BinaryExtensionFieldElement el2n = mod(el2);
             for(int i=0;i<el1b.length*8;i++){
                 if(el1s.get(i)) product = product.xor(el2n.shiftLeft(i));
             }
-            return divEuclid(new BinaryExtensionFieldElement(product.toByteArray()),irreduciblePoly).getK();
+            return divEuclid(getElementFactory().create(product),irreduciblePoly).getK();
         }
 
         /**
@@ -99,19 +93,19 @@ public class BinaryExtensionField extends FiniteField<BinaryExtensionFieldElemen
          */
         @Override
         public BinaryExtensionFieldElement inv(BinaryExtensionFieldElement el1) {
-            BinaryExtensionFieldElement t = new BinaryExtensionFieldElement("0");
-            BinaryExtensionFieldElement nt = new BinaryExtensionFieldElement("1");
-            BinaryExtensionFieldElement r = new BinaryExtensionFieldElement(irreduciblePoly);
-            BinaryExtensionFieldElement nr = new BinaryExtensionFieldElement(mod(el1));
+            BinaryExtensionFieldElement t = getElementFactory().create(BigInteger.ZERO);
+            BinaryExtensionFieldElement nt = getElementFactory().create(BigInteger.ONE);
+            BinaryExtensionFieldElement r = getElementFactory().create(irreduciblePoly);
+            BinaryExtensionFieldElement nr = getElementFactory().create(mod(el1));
             BinaryExtensionFieldElement q;
             
-            while (nr.compareTo(ZERO)>0) {      
+            while (nr.compareTo(BigInteger.ZERO)>0) {      
                 q = divEuclid(r,nr).getV();
-                BinaryExtensionFieldElement tmp = new BinaryExtensionFieldElement(t);
-                t = new BinaryExtensionFieldElement(nt);
+                BinaryExtensionFieldElement tmp = getElementFactory().create(t);
+                t = getElementFactory().create(nt);
                 nt = add(tmp, mul(q, nt));
-                tmp = new BinaryExtensionFieldElement(r);
-                r = new BinaryExtensionFieldElement(nr);
+                tmp = getElementFactory().create(r);
+                r = getElementFactory().create(nr);
 
                 nr = add(tmp, mul(q, nr));
             }
@@ -125,18 +119,18 @@ public class BinaryExtensionField extends FiniteField<BinaryExtensionFieldElemen
          * @return K ->  a mod b,  V -> a div b
          */
         private Tuple<BinaryExtensionFieldElement,BinaryExtensionFieldElement> divEuclid(BinaryExtensionFieldElement a,BinaryExtensionFieldElement b){
-            if(b.compareTo(ZERO)==0) throw new RuntimeException("cannot div by zero");
+            if(b.compareTo(BigInteger.ZERO)==0) throw new RuntimeException("cannot div by zero");
             
             if(a.getDegree()<b.getDegree()){
-                return new Tuple<>(a,new BinaryExtensionFieldElement("0"));
+                return new Tuple<>(a,getElementFactory().create(BigInteger.ZERO));
             }
 
-            BinaryExtensionFieldElement q = new  BinaryExtensionFieldElement("0");
-            BinaryExtensionFieldElement rst = new  BinaryExtensionFieldElement(a);
+            BinaryExtensionFieldElement q = getElementFactory().create(BigInteger.ZERO);
+            BinaryExtensionFieldElement rst = getElementFactory().create(a);
             while(rst.getDegree()>=b.getDegree()){
                     int pivot = rst.getDegree() - b.getDegree();
-                    q = new BinaryExtensionFieldElement(q.xor(new BigInteger("1").shiftLeft(pivot)));
-                    rst = new BinaryExtensionFieldElement(rst.xor(new BinaryExtensionFieldElement(b.shiftLeft(pivot))));  
+                    q = getElementFactory().create(q.xor(BigInteger.ONE.shiftLeft(pivot)));
+                    rst = getElementFactory().create(rst.xor(getElementFactory().create(b.shiftLeft(pivot))));  
             }
             return new Tuple<>(rst,q);
         }
@@ -160,12 +154,12 @@ public class BinaryExtensionField extends FiniteField<BinaryExtensionFieldElemen
      * iterates through the elements of this field
      * Be careful because this iterator is infinite because fields are enclosed
      */
-    public final class BinaryExtensionFieldElementIterator implements Iterator<BinaryExtensionFieldElement>{
+    private class BinaryExtensionFieldElementIterator implements Iterator<BinaryExtensionFieldElement>{
         
         private BinaryExtensionFieldElement current;
         
         public BinaryExtensionFieldElementIterator(){
-            this.current = new BinaryExtensionFieldElement(new BigInteger("1").toByteArray());
+            this.current = getElementFactory().create(BigInteger.ONE);
         }
 
         @Override
@@ -175,22 +169,11 @@ public class BinaryExtensionField extends FiniteField<BinaryExtensionFieldElemen
 
         @Override
         public BinaryExtensionFieldElement next() {
-            BinaryExtensionFieldElement res = new BinaryExtensionFieldElement(current.toByteArray());
-            current =  operator.mul(current, new BinaryExtensionFieldElement(new BigInteger("2").toByteArray()));
-            return res;
+            current =  operator.mul(current, getElementFactory().create(new BigInteger("2")));
+            return current;
         }   
     }
-    
-    @Override
-    public BinaryExtensionFieldElementIterator getIterator(){
-        return iterator;
-    }
-    
-    @Override
-    public BinaryExtensionFieldElementOperator getOperator(){
-        return operator;
-    }
-    
+        
     @Override
     public String toString(){
         return "Binary extension field over "+orderP+"^"+orderQ+" with irreductible poly "+irreduciblePoly;

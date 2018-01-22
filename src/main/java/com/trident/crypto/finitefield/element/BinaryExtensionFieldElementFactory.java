@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 trident.
+ * Copyright 2018 trident.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,26 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.trident.crypto.finitefield;
+package com.trident.crypto.finitefield.element;
 
+import com.trident.crypto.finitefield.element.BinaryExtensionFieldElement;
 import java.math.BigInteger;
 
 /**
- * defines the element of the finite field 
+ *
  * @author trident
  */
-@SuppressWarnings("serial")
-public abstract class FiniteFieldElement extends BigInteger{
-    
-    public FiniteFieldElement(byte[] binaryRepresentation){
-        super(binaryRepresentation);
+public class BinaryExtensionFieldElementFactory implements FiniteFieldElementFactory<BinaryExtensionFieldElement>{
+
+    @Override
+    public BinaryExtensionFieldElement create(BigInteger val) {
+        return new BinaryExtensionFieldElement(val);
     }
     
-    public FiniteFieldElement(String stringNumber){
-        super(stringNumber);
-    }
-    
-    public FiniteFieldElement(BigInteger integer){
-        super(integer.toByteArray());
-    }
 }

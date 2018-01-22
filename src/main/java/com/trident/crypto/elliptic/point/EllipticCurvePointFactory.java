@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.trident.crypto.elliptic;
+package com.trident.crypto.elliptic.point;
 
-import com.trident.crypto.finitefield.FiniteFieldElement;
+import com.trident.crypto.finitefield.element.FiniteFieldElement;
 
 /**
  * factory interface to yield the elliptic curve point from 2 coordinates which belong to the finite field

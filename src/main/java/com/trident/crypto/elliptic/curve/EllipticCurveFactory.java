@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 trident.
+ * Copyright 2018 trident.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,14 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.trident.crypto.finitefield;
+package com.trident.crypto.elliptic.curve;
 
+import com.trident.crypto.elliptic.point.EllipticCurvePoint;
+import com.trident.crypto.finitefield.element.FiniteFieldElement;
+import com.trident.crypto.finitefield.field.FiniteField;
 import java.math.BigInteger;
 
 /**
  *
  * @author trident
+ * @param <T>
+ * @param <K>
+ * @param <P>
  */
-public interface FiniteFieldElementFactory<T extends FiniteFieldElement>{
-    T create(BigInteger val);
+public interface EllipticCurveFactory<T extends FiniteField<K>, K extends FiniteFieldElement, P extends EllipticCurvePoint<K>>{
+    EllipticCurve<T, K, P> create(T field, K a, K b, P G, BigInteger n, BigInteger h);
 }

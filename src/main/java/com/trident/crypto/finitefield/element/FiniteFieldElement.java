@@ -13,26 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.trident.crypto.finitefield;
+package com.trident.crypto.finitefield.element;
 
 import java.math.BigInteger;
 
 /**
- *
+ * defines the element of the finite field 
  * @author trident
  */
 @SuppressWarnings("serial")
-public class PrimeFieldElement extends FiniteFieldElement{
-       
-    public PrimeFieldElement(byte[] binaryRepresentation) {
-        super(binaryRepresentation);
-    }  
-
-    public PrimeFieldElement(String stringRepresentation) {
-        super(stringRepresentation);
-    } 
-
-    public PrimeFieldElement(BigInteger bi) {
-        super(bi.toByteArray());
-    } 
+public abstract class FiniteFieldElement extends BigInteger{    
+    protected FiniteFieldElement(BigInteger integer){
+        super(integer.toByteArray());
+    }
 }

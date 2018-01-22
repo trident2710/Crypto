@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.trident.crypto.finitefield;
+package com.trident.crypto.finitefield.element;
 
 import java.math.BigInteger;
 
@@ -21,20 +21,12 @@ import java.math.BigInteger;
  *
  * @author trident
  */
+@SuppressWarnings("serial")
 public class BinaryExtensionFieldElement extends FiniteFieldElement{
     
     private int degree;
     
-    public BinaryExtensionFieldElement(byte[] binaryRepresentation) {
-        super(binaryRepresentation);
-        degree = 0;
-    }
-    
-    public BinaryExtensionFieldElement(String stringNumber){
-        super(stringNumber);
-    }
-    
-    public BinaryExtensionFieldElement(BigInteger integer){
+    BinaryExtensionFieldElement(BigInteger integer){
         super(integer);
     }
     

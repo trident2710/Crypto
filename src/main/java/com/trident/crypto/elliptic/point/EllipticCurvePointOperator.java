@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.trident.crypto.elliptic;
+package com.trident.crypto.elliptic.point;
 
-
-import com.trident.crypto.finitefield.FiniteField;
-import com.trident.crypto.finitefield.FiniteFieldElement;
-import com.trident.crypto.finitefield.FiniteFieldElementOperator;
+import com.trident.crypto.elliptic.curve.EllipticCurve;
+import com.trident.crypto.finitefield.field.FiniteField;
+import com.trident.crypto.finitefield.element.FiniteFieldElement;
+import com.trident.crypto.finitefield.element.FiniteFieldElementOperator;
 import java.math.BigInteger;
 
 
@@ -96,8 +96,8 @@ public abstract class EllipticCurvePointOperator<T extends FiniteField<K>, K ext
      */
     public P doub(P p1){
         FiniteFieldElementOperator<K> o = curve.getField().getOperator();
-        K dy = o.add(o.mul(o.mul(curve.getField().create(new BigInteger("3")),p1.getPointX()),p1.getPointX()),curve.getA());
-        K dx = o.mul(curve.getField().create(new BigInteger("3")),p1.getPointY());
+        K dy = o.add(o.mul(o.mul(curve.getField().getElementFactory().create(new BigInteger("3")),p1.getPointX()),p1.getPointX()),curve.getA());
+        K dx = o.mul(curve.getField().getElementFactory().create(new BigInteger("3")),p1.getPointY());
         K m  = o.mul(dy, o.inv(dx));
         K p3x = o.sub(o.sub(o.mul(m, m),p1.getPointX()),p1.getPointX());
         K p3y = o.sub(o.mul(m, o.sub(p1.getPointX(), p3x)),p1.getPointY());

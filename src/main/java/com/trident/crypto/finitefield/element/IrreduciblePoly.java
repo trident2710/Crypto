@@ -13,8 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.trident.crypto.finitefield;
+package com.trident.crypto.finitefield.element;
 
+import com.trident.crypto.finitefield.element.BinaryExtensionFieldElement;
+import java.math.BigInteger;
 import java.nio.ByteBuffer;
 
 /**
@@ -62,7 +64,7 @@ public final class IrreduciblePoly  extends BinaryExtensionFieldElement{
     }
 
     private IrreduciblePoly(long longValue) {
-        super(ByteBuffer.allocate(8).putLong(longValue).array());
+        super(new BigInteger(ByteBuffer.allocate(8).putLong(longValue).array()));
     }
     
     /**

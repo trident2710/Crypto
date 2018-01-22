@@ -13,8 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.trident.crypto.finitefield;
+package com.trident.crypto.finitefield.field;
 
+import com.trident.crypto.finitefield.element.FiniteFieldElementOperator;
+import com.trident.crypto.finitefield.element.PrimeFieldElement;
+import com.trident.crypto.finitefield.element.PrimeFieldElementFactory;
 import java.math.BigInteger;
 import java.util.Iterator;
 
@@ -24,72 +27,52 @@ import java.util.Iterator;
  */
 public class PrimeField extends FiniteField<PrimeFieldElement>{
     
-    private final PrimeFieldElementIterator iterator;
-    private final PrimeFieldElementOperator operator;
-
     /**
      * @param orderP should be prime
      */
-    public PrimeField(BigInteger orderP) {
-        super(orderP);
-        this.iterator = new PrimeFieldElementIterator();
-        this.operator = new PrimeFieldElementOperator();
+    private PrimeField(BigInteger orderP, PrimeFieldElementIterator iterator, PrimeFieldElementOperator operator, PrimeFieldElementFactory elementFactory) {
+        super(orderP,iterator,operator, elementFactory);
     }
 
     @Override
     public String getOrder() {
         return ""+getOrderP();
     }
-
-    @Override
-    public PrimeFieldElementIterator getIterator() {
-        return iterator;
-    }
-
-    @Override
-    public PrimeFieldElementOperator getOperator() {
-        return operator;
-    }
-
-    @Override
-    public PrimeFieldElement create(BigInteger val) {
-        return operator.mod(new PrimeFieldElement(val));
-    }
     
-    public class PrimeFieldElementOperator implements FiniteFieldElementOperator<PrimeFieldElement>{
+    private class PrimeFieldElementOperator implements FiniteFieldElementOperator<PrimeFieldElement>{
 
         @Override
         public PrimeFieldElement add(PrimeFieldElement el1, PrimeFieldElement el2) {
-            return new PrimeFieldElement(el1.add(el2).mod(orderP));
+            return getElementFactory().create(el1.add(el2).mod(orderP));
         }
 
         @Override
         public PrimeFieldElement mul(PrimeFieldElement el1, PrimeFieldElement el2) {
-            return new PrimeFieldElement(el1.multiply(el2).mod(orderP));
+            return getElementFactory().create(el1.multiply(el2).mod(orderP));
         }
 
         @Override
         public PrimeFieldElement inv(PrimeFieldElement el1) {
-            return new PrimeFieldElement(el1.modInverse(orderP));
+            return getElementFactory().create(el1.modInverse(orderP));
         }  
 
         @Override
         public PrimeFieldElement mod(PrimeFieldElement el1) {
-            return new PrimeFieldElement(el1.mod(orderP));
+            return getElementFactory().create(el1.mod(orderP));
         }
 
         @Override
         public PrimeFieldElement sub(PrimeFieldElement el1, PrimeFieldElement el2) {
-            return new PrimeFieldElement(el1.subtract(el2).mod(orderP));
+            return getElementFactory().create(el1.subtract(el2).mod(orderP));
         }
     }
     
-    public class PrimeFieldElementIterator implements Iterator<PrimeFieldElement>{
+    private class PrimeFieldElementIterator implements Iterator<PrimeFieldElement>{
 
         private PrimeFieldElement current;
         
         private PrimeFieldElementIterator(){
-            current = new PrimeFieldElement("0");
+            current = getElementFactory().create(BigInteger.ZERO);
         }
         
         @Override
@@ -99,9 +82,8 @@ public class PrimeField extends FiniteField<PrimeFieldElement>{
 
         @Override
         public PrimeFieldElement next() {
-            PrimeFieldElement res = new PrimeFieldElement(current);
-            current = new PrimeFieldElement(current.add(new BigInteger("1")).mod(orderP));
-            return res;
+            current = operator.add(current, getElementFactory().create(BigInteger.ONE));
+            return current;
         }
     }  
     

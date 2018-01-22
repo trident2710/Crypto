@@ -3,11 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.trident.crypto.elliptic;
+package com.trident.crypto.elliptic.curve;
 
-import com.trident.crypto.finitefield.BinaryExtensionField;
-import com.trident.crypto.finitefield.BinaryExtensionField.BinaryExtensionFieldElementOperator;
-import com.trident.crypto.finitefield.BinaryExtensionFieldElement;
+import com.trident.crypto.elliptic.point.ECPOverBEF;
+import com.trident.crypto.elliptic.point.EllipticCurvePointOperator;
+import com.trident.crypto.finitefield.field.BinaryExtensionField;
+import com.trident.crypto.finitefield.element.BinaryExtensionFieldElement;
+import com.trident.crypto.finitefield.element.FiniteFieldElementOperator;
 import java.math.BigInteger;
 
 /**
@@ -19,7 +21,7 @@ public class ECOverBEF extends EllipticCurve<BinaryExtensionField, BinaryExtensi
 
     private final ECOverBEFOperator operator;
     
-    public ECOverBEF(BinaryExtensionField field, BinaryExtensionFieldElement a, BinaryExtensionFieldElement b, ECPOverBEF G, BigInteger n, BigInteger h) {
+    ECOverBEF(BinaryExtensionField field, BinaryExtensionFieldElement a, BinaryExtensionFieldElement b, ECPOverBEF G, BigInteger n, BigInteger h) {
         super(field, a, b, G, n, h);
         operator = new ECOverBEFOperator(this);
     }
@@ -43,7 +45,7 @@ public class ECOverBEF extends EllipticCurve<BinaryExtensionField, BinaryExtensi
          */
         @Override
         public boolean belongsTo(ECPOverBEF el1) {
-            BinaryExtensionFieldElementOperator op = getCurve().getField().getOperator();
+            FiniteFieldElementOperator<BinaryExtensionFieldElement> op = getCurve().getField().getOperator();
             BinaryExtensionFieldElement y2  = op.mul(el1.getPointY(), el1.getPointY());
             BinaryExtensionFieldElement xy  = op.mul(el1.getPointY(), el1.getPointX());
             BinaryExtensionFieldElement x3  = op.mul(el1.getPointX(), op.mul(el1.getPointX(), el1.getPointX()));
