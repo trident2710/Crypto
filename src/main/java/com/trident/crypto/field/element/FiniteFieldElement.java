@@ -13,20 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.trident.crypto.elliptic.curve;
+package com.trident.crypto.field.element;
 
-import com.trident.crypto.elliptic.point.EllipticCurvePoint;
-import com.trident.crypto.finitefield.element.FiniteFieldElement;
-import com.trident.crypto.finitefield.field.FiniteField;
 import java.math.BigInteger;
 
 /**
  *
  * @author trident
- * @param <T>
- * @param <K>
- * @param <P>
  */
-public interface EllipticCurveFactory<T extends FiniteField<K>, K extends FiniteFieldElement, P extends EllipticCurvePoint<K>>{
-    EllipticCurve<T, K, P> create(T field, K a, K b, P G, BigInteger n, BigInteger h);
+@SuppressWarnings("serial")
+public class FiniteFieldElement extends BigInteger{
+    
+    private FiniteFieldElement(byte[] val) {
+        super(val);
+    }   
+    
+    FiniteFieldElement(BigInteger element){
+        super(element.toByteArray());
+    }
+    
+    public int getDegree(){
+        return 1;
+    }
 }

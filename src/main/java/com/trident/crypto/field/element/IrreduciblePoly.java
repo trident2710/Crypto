@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 trident.
+ * Copyright 2018 trident.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,9 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.trident.crypto.finitefield.element;
+package com.trident.crypto.field.element;
 
-import com.trident.crypto.finitefield.element.BinaryExtensionFieldElement;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
 
@@ -23,7 +22,8 @@ import java.nio.ByteBuffer;
  *
  * @author trident
  */
-public final class IrreduciblePoly  extends BinaryExtensionFieldElement{
+@SuppressWarnings("serial")
+public class IrreduciblePoly extends BinaryExtensionFieldElement{
     
     private static final IrreduciblePoly[] PREDEFINED_POLYS;
     static {
@@ -63,7 +63,7 @@ public final class IrreduciblePoly  extends BinaryExtensionFieldElement{
         //TODO: add all irreductible polys up to 32
     }
 
-    private IrreduciblePoly(long longValue) {
+    public IrreduciblePoly(long longValue) {
         super(new BigInteger(ByteBuffer.allocate(8).putLong(longValue).array()));
     }
     

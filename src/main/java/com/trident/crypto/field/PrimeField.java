@@ -13,20 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.trident.crypto.finitefield.element;
+package com.trident.crypto.field;
 
-import com.trident.crypto.finitefield.element.BinaryExtensionFieldElement;
 import java.math.BigInteger;
 
 /**
  *
  * @author trident
  */
-public class BinaryExtensionFieldElementFactory implements FiniteFieldElementFactory<BinaryExtensionFieldElement>{
+public class PrimeField extends FiniteField{
+    
+    public PrimeField(BigInteger orderP) {
+        super(orderP, orderP);
+    }
+    
+    @Override
+    public String toString(){
+        return "Prime field over "+getOrderP();
+    }
 
     @Override
-    public BinaryExtensionFieldElement create(BigInteger val) {
-        return new BinaryExtensionFieldElement(val);
+    public BigInteger getOrder() {
+        return getOrderP();
     }
     
 }

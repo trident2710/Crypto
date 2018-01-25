@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 trident.
+ * Copyright 2018 trident.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,16 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.trident.crypto.finitefield.exception;
+package com.trident.crypto.field.element;
+
+import java.math.BigInteger;
 
 /**
  *
  * @author trident
  */
-public class ElementOutOfFiniteFieldException  extends RuntimeException{
-    private static final long serialVersionUID = 1L;
-    public ElementOutOfFiniteFieldException(){
-        super("The provided element is out of finite field");
+public class FiniteFieldElementFactory {
+    public FiniteFieldElement createFrom(BigInteger value){
+        return new FiniteFieldElement(value);
     }
-    
 }

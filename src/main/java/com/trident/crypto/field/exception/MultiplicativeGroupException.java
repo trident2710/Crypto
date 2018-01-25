@@ -13,20 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.trident.crypto.finitefield.element;
-
-import com.trident.crypto.finitefield.element.PrimeFieldElement;
-import java.math.BigInteger;
+package com.trident.crypto.field.exception;
 
 /**
  *
  * @author trident
  */
-public class PrimeFieldElementFactory implements FiniteFieldElementFactory<PrimeFieldElement>{
-
-    @Override
-    public PrimeFieldElement create(BigInteger val) {
-        return new PrimeFieldElement(val);
+public class MultiplicativeGroupException extends RuntimeException{
+    public MultiplicativeGroupException(){
+        super("The element does not belong to the multiplicative group");
     }
     
 }

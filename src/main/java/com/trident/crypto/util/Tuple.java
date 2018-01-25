@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 trident.
+ * Copyright 2018 trident.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,15 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.trident.crypto.finitefield.util;
+package com.trident.crypto.util;
 
 /**
- * basic tuple class
+ *
  * @author trident
- * @param <K>
- * @param <V>
+ * @param <K> - key
+ * @param <V> - value
  */
 public class Tuple<K,V> {
+    
     private final K k;
     private final V v;
 

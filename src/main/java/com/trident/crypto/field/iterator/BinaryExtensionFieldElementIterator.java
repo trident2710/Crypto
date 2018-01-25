@@ -13,22 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.trident.crypto.elliptic.curve;
+package com.trident.crypto.field.iterator;
 
-import com.trident.crypto.elliptic.point.ECPOverBEF;
-import com.trident.crypto.finitefield.element.BinaryExtensionFieldElement;
-import com.trident.crypto.finitefield.field.BinaryExtensionField;
+import com.trident.crypto.field.element.FiniteFieldElement;
+import com.trident.crypto.field.operator.BinaryExtensionFieldElementArithmetics;
 import java.math.BigInteger;
 
 /**
  *
  * @author trident
  */
-public class ECOverBEFFactory implements EllipticCurveFactory<BinaryExtensionField, BinaryExtensionFieldElement, ECPOverBEF>{
-
+public class BinaryExtensionFieldElementIterator extends FiniteFieldElementIterator{
+    
+    public BinaryExtensionFieldElementIterator(BinaryExtensionFieldElementArithmetics arithmetics) {
+        super(arithmetics);
+        current = arithmetics.getElementFactory().createFrom(BigInteger.ONE);
+    }
+    
     @Override
-    public ECOverBEF create(BinaryExtensionField field, BinaryExtensionFieldElement a, BinaryExtensionFieldElement b, ECPOverBEF G, BigInteger n, BigInteger h) {
-        return new ECOverBEF(field, a, b, G, BigInteger.ONE, BigInteger.ONE);
+    public FiniteFieldElement next() {
+        current = arithmetics.mul(current, arithmetics.getElementFactory().createFrom(new BigInteger("2")));
+        return current;
     }
     
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 trident.
+ * Copyright 2018 trident.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.trident.crypto.finitefield.element;
+package com.trident.crypto.field.element;
 
 import java.math.BigInteger;
 
@@ -25,12 +25,12 @@ import java.math.BigInteger;
 public class BinaryExtensionFieldElement extends FiniteFieldElement{
     
     private int degree;
-    
-    BinaryExtensionFieldElement(BigInteger integer){
-        super(integer);
+        
+    BinaryExtensionFieldElement(BigInteger element){
+        super(element);
     }
     
-    
+    @Override
     public int getDegree() {
         if(this.compareTo(ZERO)==0) return -1;
         
@@ -65,5 +65,5 @@ public class BinaryExtensionFieldElement extends FiniteFieldElement{
             }
         }
         return sb.toString();
-    }   
+    }      
 }
