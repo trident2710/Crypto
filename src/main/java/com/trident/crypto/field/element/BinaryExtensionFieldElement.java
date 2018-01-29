@@ -16,6 +16,8 @@
 package com.trident.crypto.field.element;
 
 import java.math.BigInteger;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  *
@@ -65,5 +67,27 @@ public class BinaryExtensionFieldElement extends FiniteFieldElement{
             }
         }
         return sb.toString();
-    }      
+    }   
+    
+    public static BinaryExtensionFieldElement fromString(String notation){
+        String[] tokens = notation.split(" ");
+        Set<Integer> wasDegree = new HashSet<>();
+        BigInteger result = BigInteger.ZERO;
+        for(String token: tokens){
+            int degree = 0;
+            if(token.startsWith("x^")){
+                degree = Integer.parseInt(token.substring(2)); 
+                if(degree<=0) throw new RuntimeException("unexpected degree");
+            } else if(token.equals("1")){
+                degree = 0;
+            } else{
+                throw new RuntimeException("unexpected token");
+            }
+            if(!wasDegree.contains(degree)){
+                wasDegree.add(degree);
+                result = result.add(BigInteger.ONE.shiftLeft(degree));
+            } else throw new RuntimeException("same degree second time");
+        }
+        return new BinaryExtensionFieldElement(result);
+    }
 }

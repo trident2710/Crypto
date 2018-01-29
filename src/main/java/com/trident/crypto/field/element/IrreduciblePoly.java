@@ -63,10 +63,13 @@ public class IrreduciblePoly extends BinaryExtensionFieldElement{
         //TODO: add all irreductible polys up to 32
     }
 
-    public IrreduciblePoly(long longValue) {
+    private IrreduciblePoly(long longValue) {
         super(new BigInteger(ByteBuffer.allocate(8).putLong(longValue).array()));
     }
     
+    public IrreduciblePoly(BinaryExtensionFieldElement element){
+        super(element);
+    }
     /**
      * get the list of predefined irreducible polys of each degree up to 32
      * @return 
