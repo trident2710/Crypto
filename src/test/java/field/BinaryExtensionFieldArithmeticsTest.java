@@ -50,7 +50,7 @@ public class BinaryExtensionFieldArithmeticsTest {
         irreduciblePoly = IrreduciblePoly.getPredefined()[generatorPow];
         arithmetics = FiniteFieldElementArithmetics.createBinaryExtensionFieldElementArithmetics(irreduciblePoly);
         System.out.println(arithmetics.getField());
-        
+
     }
     
     @Test
