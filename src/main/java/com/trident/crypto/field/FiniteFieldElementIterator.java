@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.trident.crypto.field.iterator;
+package com.trident.crypto.field;
 
 import com.trident.crypto.field.element.FiniteFieldElement;
 import com.trident.crypto.field.operator.FiniteFieldElementArithmetics;
@@ -27,7 +27,7 @@ import java.util.Iterator;
 public class FiniteFieldElementIterator implements Iterator<FiniteFieldElement>{
     
     protected final FiniteFieldElementArithmetics arithmetics;
-    protected FiniteFieldElement current;
+    private FiniteFieldElement current;
     
     public FiniteFieldElementIterator(FiniteFieldElementArithmetics arithmetics){
         this.arithmetics = arithmetics;

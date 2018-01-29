@@ -25,7 +25,7 @@ import java.math.BigInteger;
  *
  * @author trident
  */
-public class PrimeFieldElementArithmetics extends FiniteFieldElementArithmetics{
+class PrimeFieldElementArithmetics extends FiniteFieldElementArithmetics{
     
     public PrimeFieldElementArithmetics(PrimeField field, FiniteFieldElementFactory elementFactory){
         super(field, elementFactory);

@@ -14,13 +14,6 @@
  * limitations under the License.
  */
 package com.trident.crypto.field;
-
-import com.trident.crypto.field.element.BinaryExtensionFieldElementFactory;
-import com.trident.crypto.field.element.FiniteFieldElementFactory;
-import com.trident.crypto.field.element.IrreduciblePoly;
-import com.trident.crypto.field.operator.BinaryExtensionFieldElementArithmetics;
-import com.trident.crypto.field.operator.FiniteFieldElementArithmetics;
-import com.trident.crypto.field.operator.PrimeFieldElementArithmetics;
 import java.math.BigInteger;
 
 /**

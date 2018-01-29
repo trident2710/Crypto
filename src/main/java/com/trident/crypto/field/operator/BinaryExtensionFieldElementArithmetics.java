@@ -22,13 +22,12 @@ import com.trident.crypto.field.element.FiniteFieldElement;
 import com.trident.crypto.field.exception.MultiplicativeGroupException;
 import com.trident.crypto.util.Tuple;
 import java.math.BigInteger;
-import java.util.BitSet;
 
 /**
  *
  * @author trident
  */
-public class BinaryExtensionFieldElementArithmetics extends FiniteFieldElementArithmetics{
+class BinaryExtensionFieldElementArithmetics extends FiniteFieldElementArithmetics{
 
     private final FiniteFieldElement irreduciblePoly;
     

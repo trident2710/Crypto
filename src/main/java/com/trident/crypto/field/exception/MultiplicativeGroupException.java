@@ -19,6 +19,7 @@ package com.trident.crypto.field.exception;
  *
  * @author trident
  */
+@SuppressWarnings("serial")
 public class MultiplicativeGroupException extends RuntimeException{
     public MultiplicativeGroupException(){
         super("The element does not belong to the multiplicative group");

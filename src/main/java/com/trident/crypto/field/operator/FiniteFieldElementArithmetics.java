@@ -32,8 +32,8 @@ public abstract class FiniteFieldElementArithmetics{
     
     private final FiniteField field;
     private final FiniteFieldElementFactory elementFactory;
-    
-    protected FiniteFieldElementArithmetics(FiniteField field, FiniteFieldElementFactory elementFactory){
+        
+    FiniteFieldElementArithmetics(FiniteField field, FiniteFieldElementFactory elementFactory){
         this.field = field;
         this.elementFactory = elementFactory;
     }
