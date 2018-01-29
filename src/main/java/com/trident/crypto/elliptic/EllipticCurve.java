@@ -5,7 +5,10 @@
  */
 package com.trident.crypto.elliptic;
 
+import com.trident.crypto.elliptic.nist.NistEC;
+import com.trident.crypto.field.element.BinaryExtensionFieldElementFactory;
 import com.trident.crypto.field.element.FiniteFieldElement;
+import com.trident.crypto.field.element.FiniteFieldElementFactory;
 import java.math.BigInteger;
 
 // @see http://www.secg.org/SEC2-Ver-1.0.pdf
@@ -81,4 +84,19 @@ public class EllipticCurve{
                 .append("\n");      
         return sb.toString();
     }   
+    
+    public static EllipticCurve createFrom(NistEC spec){
+        return createFrom(spec, spec.getType()?new FiniteFieldElementFactory():new BinaryExtensionFieldElementFactory());
+    }
+    
+    private static EllipticCurve createFrom(NistEC spec, FiniteFieldElementFactory factory){
+        return new EllipticCurve(factory.createFrom(spec.getA()),
+                factory.createFrom(spec.getB()),
+                EllipticCurvePoint.create(factory.createFrom(spec.getGx()), factory.createFrom(spec.getGy())),
+                spec.getN(),
+                spec.getH());
+    }
+    
+    
+    
 }
