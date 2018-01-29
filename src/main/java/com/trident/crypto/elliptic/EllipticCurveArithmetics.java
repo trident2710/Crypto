@@ -5,17 +5,17 @@
  */
 package com.trident.crypto.elliptic;
 
+import com.trident.crypto.elliptic.nist.NistEC;
 import com.trident.crypto.field.element.FiniteFieldElement;
 import com.trident.crypto.field.operator.FiniteFieldElementArithmetics;
 import java.math.BigInteger;
 
 public class EllipticCurveArithmetics{
     
-    protected final FiniteFieldElementArithmetics arithmetics;
+    
     protected final EllipticCurve ellipticCurve;
 
-    public EllipticCurveArithmetics(FiniteFieldElementArithmetics arithmetics, EllipticCurve ellipticCurve) {
-        this.arithmetics = arithmetics;
+    public EllipticCurveArithmetics(EllipticCurve ellipticCurve) {
         this.ellipticCurve = ellipticCurve;
     }
     
@@ -28,12 +28,13 @@ public class EllipticCurveArithmetics{
     public EllipticCurvePoint add(EllipticCurvePoint p1, EllipticCurvePoint p2){
         // if one of coordinates is the same
         if(Math.abs(p1.compareTo(p2))<1) return doub(p1);
+        FiniteFieldElementArithmetics f = ellipticCurve.getFieldArithmetics();
             
-        FiniteFieldElement dy = arithmetics.sub(p2.getPointY(), p1.getPointY());
-        FiniteFieldElement dx = arithmetics.sub(p2.getPointX(), p1.getPointX());
-        FiniteFieldElement m  = arithmetics.mul(dy, arithmetics.inv(dx));
-        FiniteFieldElement p3x = arithmetics.sub(arithmetics.sub(arithmetics.mul(m, m),p1.getPointX()),p2.getPointX());
-        FiniteFieldElement p3y = arithmetics.sub(arithmetics.mul(m, arithmetics.sub(p1.getPointX(), p3x)),p1.getPointY());
+        FiniteFieldElement dy = f.sub(p2.getPointY(), p1.getPointY());
+        FiniteFieldElement dx = f.sub(p2.getPointX(), p1.getPointX());
+        FiniteFieldElement m  = f.mul(dy, f.inv(dx));
+        FiniteFieldElement p3x = f.sub(f.sub(f.mul(m, m),p1.getPointX()),p2.getPointX());
+        FiniteFieldElement p3y = f.sub(f.mul(m, f.sub(p1.getPointX(), p3x)),p1.getPointY());
         return EllipticCurvePoint.create(p3x, p3y);
     }
     
@@ -74,21 +75,22 @@ public class EllipticCurveArithmetics{
      * @return Q = 2*P
      */
     public EllipticCurvePoint doub(EllipticCurvePoint p1){
-        FiniteFieldElement dy = arithmetics.add(arithmetics.mul(arithmetics.mul(arithmetics.getElementFactory().createFrom(new BigInteger("3")),p1.getPointX()),p1.getPointX()),ellipticCurve.getA());
-        FiniteFieldElement dx = arithmetics.mul(arithmetics.getElementFactory().createFrom(new BigInteger("3")),p1.getPointY());
-        FiniteFieldElement m  = arithmetics.mul(dy, arithmetics.inv(dx));
-        FiniteFieldElement p3x = arithmetics.sub(arithmetics.sub(arithmetics.mul(m, m),p1.getPointX()),p1.getPointX());
-        FiniteFieldElement p3y = arithmetics.sub(arithmetics.mul(m, arithmetics.sub(p1.getPointX(), p3x)),p1.getPointY());
+        FiniteFieldElementArithmetics f = ellipticCurve.getFieldArithmetics();
+        
+        FiniteFieldElement dy = f.add(f.mul(f.mul(f.getElementFactory().createFrom(new BigInteger("3")),p1.getPointX()),p1.getPointX()),ellipticCurve.getA());
+        FiniteFieldElement dx = f.mul(f.getElementFactory().createFrom(new BigInteger("3")),p1.getPointY());
+        FiniteFieldElement m  = f.mul(dy, f.inv(dx));
+        FiniteFieldElement p3x = f.sub(f.sub(f.mul(m, m),p1.getPointX()),p1.getPointX());
+        FiniteFieldElement p3y = f.sub(f.mul(m, f.sub(p1.getPointX(), p3x)),p1.getPointY());
         return EllipticCurvePoint.create(p3x, p3y);
-    }
-
-    public FiniteFieldElementArithmetics getArithmetics() {
-        return arithmetics;
     }
 
     public EllipticCurve getEllipticCurve() {
         return ellipticCurve;
     }
     
+    public static EllipticCurveArithmetics createFrom(NistEC spec){
+        return new EllipticCurveArithmetics(EllipticCurve.createFrom(spec));
+    }  
 }
 

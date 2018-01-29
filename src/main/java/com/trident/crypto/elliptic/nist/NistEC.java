@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 package com.trident.crypto.elliptic.nist;
-
 import java.math.BigInteger;
 
 /**
@@ -55,7 +54,7 @@ public enum NistEC {
     private final String PRIME_FIELD_PREFIX = "SECP";
     private final String BINARY_EXTENSION_FIELD_PREFIX = "SECT";
     
-    private final BigInteger modulo;
+    private final String p;
     private final BigInteger a;
     private final BigInteger b;
     private final BigInteger S;
@@ -63,9 +62,9 @@ public enum NistEC {
     private final BigInteger Gy;
     private final BigInteger n;
     private final BigInteger h;
-
-    private NistEC(String modulo, String a, String b, String S, String Gx, String Gy, String n, String h) {
-        this.modulo = new BigInteger(modulo, 16);
+    
+    private NistEC(String p, String a, String b, String S, String Gx, String Gy, String n, String h) {
+        this.p = p;
         this.a = new BigInteger(a, 16);
         this.b = new BigInteger(b, 16);
         this.S = new BigInteger(S, 16);
@@ -79,8 +78,8 @@ public enum NistEC {
         return this.toString().startsWith(PRIME_FIELD_PREFIX);
     }
     
-    public BigInteger getModulo() {
-        return modulo;
+    public String getP() {
+        return p;
     }
 
     public BigInteger getA() {

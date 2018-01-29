@@ -6,9 +6,12 @@
 package com.trident.crypto.elliptic;
 
 import com.trident.crypto.elliptic.nist.NistEC;
+import com.trident.crypto.field.element.BinaryExtensionFieldElement;
 import com.trident.crypto.field.element.BinaryExtensionFieldElementFactory;
 import com.trident.crypto.field.element.FiniteFieldElement;
 import com.trident.crypto.field.element.FiniteFieldElementFactory;
+import com.trident.crypto.field.element.IrreduciblePoly;
+import com.trident.crypto.field.operator.FiniteFieldElementArithmetics;
 import java.math.BigInteger;
 
 // @see http://www.secg.org/SEC2-Ver-1.0.pdf
@@ -23,25 +26,35 @@ public class EllipticCurve{
      * parameter b of the curve equation 
      */
     private final FiniteFieldElement b;
+    
     /**
      * point on the curve with high order
      */
     private final EllipticCurvePoint G;
+    
     /**
      * order of the point G
      */
     private final BigInteger n;
+    
     /**
      * cofactor - relation between number of points of curve and order of point G
      */
     private final BigInteger h;
+    
+    private final FiniteFieldElementArithmetics fieldArithmetics;
 
-    public EllipticCurve(FiniteFieldElement a, FiniteFieldElement b, EllipticCurvePoint G, BigInteger n, BigInteger h) {
+    public EllipticCurve(FiniteFieldElementArithmetics fieldArithmetics, FiniteFieldElement a, FiniteFieldElement b, EllipticCurvePoint G, BigInteger n, BigInteger h) {
         this.a = a;
         this.b = b;
         this.G = G;
         this.n = n;
         this.h = h;
+        this.fieldArithmetics = fieldArithmetics;
+    }
+
+    public FiniteFieldElementArithmetics getFieldArithmetics() {
+        return fieldArithmetics;
     }
 
     public FiniteFieldElement getA() {
@@ -90,13 +103,15 @@ public class EllipticCurve{
     }
     
     private static EllipticCurve createFrom(NistEC spec, FiniteFieldElementFactory factory){
-        return new EllipticCurve(factory.createFrom(spec.getA()),
+        FiniteFieldElementArithmetics arithmetics = spec.getType()?
+                FiniteFieldElementArithmetics.createPrimeFieldElementArithmetics(new BigInteger(spec.getP(),16)):
+                FiniteFieldElementArithmetics.createBinaryExtensionFieldElementArithmetics(new IrreduciblePoly(BinaryExtensionFieldElement.fromString(spec.getP())));
+        
+        return new EllipticCurve(arithmetics,
+                factory.createFrom(spec.getA()),
                 factory.createFrom(spec.getB()),
                 EllipticCurvePoint.create(factory.createFrom(spec.getGx()), factory.createFrom(spec.getGy())),
                 spec.getN(),
                 spec.getH());
-    }
-    
-    
-    
+    }   
 }
