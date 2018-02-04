@@ -97,11 +97,11 @@ public abstract class FiniteFieldElementArithmetics{
         return "Arithmetics defined over field: "+getField();
     }
     
-    public static FiniteFieldElementArithmetics createPrimeFieldElementArithmetics(BigInteger fieldOrder){
+    public static FiniteFieldElementArithmetics createFieldElementArithmetics(BigInteger fieldOrder){
         return new PrimeFieldElementArithmetics(new PrimeField(fieldOrder), new FiniteFieldElementFactory());
     }
     
-    public static FiniteFieldElementArithmetics createBinaryExtensionFieldElementArithmetics(IrreduciblePoly fieldIrreduciblePoly){
+    public static FiniteFieldElementArithmetics createFieldElementArithmetics(IrreduciblePoly fieldIrreduciblePoly){
         return new BinaryExtensionFieldElementArithmetics(new BinaryExtensionField(fieldIrreduciblePoly), new BinaryExtensionFieldElementFactory());
     }
 }

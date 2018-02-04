@@ -43,7 +43,7 @@ public class PrimeFieldArithmeticsTest {
         generator = 1009;
         times = 1000;
         biGenerator = new BigInteger(Integer.toString(generator));
-        arithmetics = FiniteFieldElementArithmetics.createPrimeFieldElementArithmetics(biGenerator);
+        arithmetics = FiniteFieldElementArithmetics.createFieldElementArithmetics(biGenerator);
         System.out.println(arithmetics.getField());
         random = new Random();
     }

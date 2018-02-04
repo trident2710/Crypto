@@ -39,7 +39,7 @@ public class EllipticCurveTest {
         irredPolyDegree = random.nextInt(IrreduciblePoly.getPredefined().length);
         times = 1000;
         irreduciblePoly = IrreduciblePoly.getPredefined()[irredPolyDegree];
-        arithmetics = FiniteFieldElementArithmetics.createBinaryExtensionFieldElementArithmetics(irreduciblePoly);
+        arithmetics = FiniteFieldElementArithmetics.createFieldElementArithmetics(irreduciblePoly);
         System.out.println(arithmetics.getField());
     }
     

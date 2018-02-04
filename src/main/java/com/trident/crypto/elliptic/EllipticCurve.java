@@ -103,9 +103,8 @@ public class EllipticCurve{
     }
     
     private static EllipticCurve createFrom(NistEC spec, FiniteFieldElementFactory factory){
-        FiniteFieldElementArithmetics arithmetics = spec.getType()?
-                FiniteFieldElementArithmetics.createPrimeFieldElementArithmetics(new BigInteger(spec.getP(),16)):
-                FiniteFieldElementArithmetics.createBinaryExtensionFieldElementArithmetics(new IrreduciblePoly(BinaryExtensionFieldElement.fromString(spec.getP())));
+        FiniteFieldElementArithmetics arithmetics = 
+                FiniteFieldElementArithmetics.createFieldElementArithmetics(spec.getType()?new BigInteger(spec.getP(),16):new IrreduciblePoly(BinaryExtensionFieldElement.fromString(spec.getP())));
         
         return new EllipticCurve(arithmetics,
                 factory.createFrom(spec.getA()),
