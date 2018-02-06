@@ -1,9 +1,9 @@
 package field;
 
 
+import com.trident.crypto.elliptic.nist.NistEC;
 import com.trident.crypto.field.element.BinaryExtensionFieldElement;
 import com.trident.crypto.field.element.FiniteFieldElement;
-import com.trident.crypto.field.element.IrreduciblePoly;
 import com.trident.crypto.field.exception.MultiplicativeGroupException;
 import com.trident.crypto.field.operator.FiniteFieldElementArithmetics;
 import java.math.BigInteger;
@@ -35,19 +35,15 @@ import org.junit.Test;
 
 public class BinaryExtensionFieldArithmeticsTest {
     private FiniteFieldElementArithmetics arithmetics;
-    private int generator;
-    private int generatorPow;
     private int times;
     private Random random;
-    private IrreduciblePoly irreduciblePoly;
+    private BinaryExtensionFieldElement irreduciblePoly;
     
     @Before
     public void init(){
         random = new Random();
-        generatorPow = random.nextInt(16);
-        generator = 1<<generatorPow;
-        times = 1000;
-        irreduciblePoly = IrreduciblePoly.getPredefined()[generatorPow];
+        times = 10000;
+        irreduciblePoly = BinaryExtensionFieldElement.fromString(NistEC.SECT113R1.getP());
         arithmetics = FiniteFieldElementArithmetics.createFieldElementArithmetics(irreduciblePoly);
         System.out.println(arithmetics.getField());
 
@@ -56,8 +52,8 @@ public class BinaryExtensionFieldArithmeticsTest {
     @Test
     public void testAddition(){
         for(int i=0;i<times;i++){
-            FiniteFieldElement x = arithmetics.getElementFactory().createFrom(new BigInteger(Integer.toString(random.nextInt(generator))));
-            FiniteFieldElement y = arithmetics.getElementFactory().createFrom(new BigInteger(Integer.toString(random.nextInt(generator))));
+            FiniteFieldElement x = arithmetics.getElementFactory().createFrom(new BigInteger(irreduciblePoly.getDegree(),random));
+            FiniteFieldElement y = arithmetics.getElementFactory().createFrom(new BigInteger(irreduciblePoly.getDegree(),random));
             FiniteFieldElement res = arithmetics.add(x, y);
             Assert.assertEquals(res, arithmetics.mod(x).xor(arithmetics.mod(y)));
         } 
@@ -67,8 +63,8 @@ public class BinaryExtensionFieldArithmeticsTest {
     @Test
     public void testSubstraction(){
         for(int i=0;i<times;i++){
-            FiniteFieldElement x = arithmetics.getElementFactory().createFrom(new BigInteger(Integer.toString(random.nextInt(generator))));
-            FiniteFieldElement y = arithmetics.getElementFactory().createFrom(new BigInteger(Integer.toString(random.nextInt(generator))));
+            FiniteFieldElement x = arithmetics.getElementFactory().createFrom(new BigInteger(irreduciblePoly.getDegree(),random));
+            FiniteFieldElement y = arithmetics.getElementFactory().createFrom(new BigInteger(irreduciblePoly.getDegree(),random));
             FiniteFieldElement res = arithmetics.sub(x, y);
             Assert.assertEquals(res, arithmetics.mod(x).xor(arithmetics.mod(y)));
         } 
@@ -78,17 +74,19 @@ public class BinaryExtensionFieldArithmeticsTest {
     @Test
     public void testMultiplication(){
         for(int i=0;i<times;i++){
-            BinaryExtensionFieldElement x = (BinaryExtensionFieldElement)arithmetics.getElementFactory().createFrom(new BigInteger(Integer.toString(random.nextInt(generator))));
-            BinaryExtensionFieldElement y = (BinaryExtensionFieldElement)arithmetics.getElementFactory().createFrom(new BigInteger(Integer.toString(random.nextInt(generator))));            
+            BinaryExtensionFieldElement x = (BinaryExtensionFieldElement)arithmetics.getElementFactory().createFrom(new BigInteger(irreduciblePoly.getDegree(),random));
+            BinaryExtensionFieldElement y = (BinaryExtensionFieldElement)arithmetics.getElementFactory().createFrom(new BigInteger(irreduciblePoly.getDegree(),random)); 
             BinaryExtensionFieldElement lres = (BinaryExtensionFieldElement)arithmetics.mul(x, y);
+            BinaryExtensionFieldElement rres = (BinaryExtensionFieldElement)arithmetics.mul(y, x);
             Assert.assertTrue(lres.getDegree()<irreduciblePoly.getDegree());
+            Assert.assertTrue(lres.equals(rres));
         } 
     }
     
     @Test
     public void testInverse(){
         for(int i=0;i<times;i++){
-            BinaryExtensionFieldElement x = (BinaryExtensionFieldElement)arithmetics.getElementFactory().createFrom(new BigInteger(Integer.toString(random.nextInt(generator))));
+            BinaryExtensionFieldElement x = (BinaryExtensionFieldElement)arithmetics.getElementFactory().createFrom(new BigInteger(irreduciblePoly.getDegree(),random));
             if(!(arithmetics.mod(x).equals(BigInteger.ZERO))){
                 BinaryExtensionFieldElement res = (BinaryExtensionFieldElement)arithmetics.inv(x);
                 FiniteFieldElement mul = arithmetics.mul(res, x);

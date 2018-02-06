@@ -5,6 +5,7 @@
  */
 package com.trident.crypto.elliptic;
 import com.trident.crypto.field.element.FiniteFieldElement;
+import java.util.Objects;
 
 
 public class EllipticCurvePoint implements Comparable<EllipticCurvePoint>{
@@ -47,6 +48,23 @@ public class EllipticCurvePoint implements Comparable<EllipticCurvePoint>{
     @Override
     public int compareTo(EllipticCurvePoint o) {
         return o.getPointX().compareTo(this.getPointX())+o.getPointY().compareTo(o.getPointY());
+    }
+    
+    @Override
+    public boolean equals(Object other){
+        if(other == this) return true;
+        if(other == null) return false;
+        if(!(other instanceof EllipticCurvePoint)) return false;
+        EllipticCurvePoint o = (EllipticCurvePoint)other;
+        return o.getPointX().equals(this.getPointX())&&o.getPointY().equals(this.getPointY());
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 37 * hash + Objects.hashCode(this.pointX);
+        hash = 37 * hash + Objects.hashCode(this.pointY);
+        return hash;
     }
     
     public static EllipticCurvePoint create(FiniteFieldElement pointX, FiniteFieldElement pointY){

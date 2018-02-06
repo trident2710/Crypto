@@ -10,7 +10,6 @@ import com.trident.crypto.field.element.BinaryExtensionFieldElement;
 import com.trident.crypto.field.element.BinaryExtensionFieldElementFactory;
 import com.trident.crypto.field.element.FiniteFieldElement;
 import com.trident.crypto.field.element.FiniteFieldElementFactory;
-import com.trident.crypto.field.element.IrreduciblePoly;
 import com.trident.crypto.field.operator.FiniteFieldElementArithmetics;
 import java.math.BigInteger;
 
@@ -80,7 +79,12 @@ public class EllipticCurve{
     @Override
     public String toString(){
         StringBuilder sb = new StringBuilder();
-               sb.append("A = ")
+        sb.append("Elliptic curve with:")
+                .append("\n")
+                .append(getFieldArithmetics())
+                .append("\n")
+                .append("With params:\n")
+                .append("A = ")
                 .append(getA())
                 .append("\n")
                 .append("B = ")
@@ -104,7 +108,7 @@ public class EllipticCurve{
     
     private static EllipticCurve createFrom(NistEC spec, FiniteFieldElementFactory factory){
         FiniteFieldElementArithmetics arithmetics = 
-                FiniteFieldElementArithmetics.createFieldElementArithmetics(spec.getType()?new BigInteger(spec.getP(),16):new IrreduciblePoly(BinaryExtensionFieldElement.fromString(spec.getP())));
+                FiniteFieldElementArithmetics.createFieldElementArithmetics(spec.getType()?new BigInteger(spec.getP(),16):BinaryExtensionFieldElement.fromString(spec.getP()));
         
         return new EllipticCurve(arithmetics,
                 factory.createFrom(spec.getA()),

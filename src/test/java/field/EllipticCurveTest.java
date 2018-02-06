@@ -15,32 +15,51 @@
  */
 package field;
 
-import com.trident.crypto.elliptic.EllipticCurve;
-import com.trident.crypto.field.element.IrreduciblePoly;
-import com.trident.crypto.field.operator.FiniteFieldElementArithmetics;
+import com.trident.crypto.elliptic.arithmetics.EllipticCurveArithmetics;
+import com.trident.crypto.elliptic.EllipticCurvePoint;
+import com.trident.crypto.elliptic.nist.NistEC;
+import java.math.BigInteger;
 import java.util.Random;
+import junit.framework.Assert;
 import org.junit.Before;
+import org.junit.Test;
 
 /**
  *
  * @author trident
  */
 public class EllipticCurveTest {
-    private FiniteFieldElementArithmetics arithmetics;
-    private int irredPolyDegree;
     private int times;
     private Random random;
-    private IrreduciblePoly irreduciblePoly;
-    private EllipticCurve ellipticCurve;
+    private EllipticCurveArithmetics ar;
     
     @Before
     public void init(){
         random = new Random();
-        irredPolyDegree = random.nextInt(IrreduciblePoly.getPredefined().length);
-        times = 1000;
-        irreduciblePoly = IrreduciblePoly.getPredefined()[irredPolyDegree];
-        arithmetics = FiniteFieldElementArithmetics.createFieldElementArithmetics(irreduciblePoly);
-        System.out.println(arithmetics.getField());
+        times = 1<<10;
+        ar = EllipticCurveArithmetics.createFrom(NistEC.values()[random.nextInt(NistEC.values().length)]);
+        System.out.println(ar);
     }
     
+    @Test
+    public void testPointOperations(){
+        EllipticCurvePoint p = ar.getEllipticCurve().getG();
+        
+        for(int i=0;i<times;i++){
+            p = ar.doub(p);
+            Assert.assertTrue(ar.belongsTo(p));
+        }
+        
+        for(int i=0;i<times;i++){
+            EllipticCurvePoint doub = ar.doub(p);
+            p = ar.add(p,p);
+            Assert.assertTrue(ar.belongsTo(p)&&p.equals(doub));
+        }
+        
+        for(int i=0;i<times;i++){
+            EllipticCurvePoint doub = ar.doub(p);
+            p = ar.mul(new BigInteger("2"), p);
+            Assert.assertTrue(ar.belongsTo(p)&&p.equals(doub));
+        }
+    }   
 }
