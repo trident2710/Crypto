@@ -18,7 +18,7 @@ package com.trident.crypto.field.element;
 import java.math.BigInteger;
 
 /**
- *
+ * Represents the element in finite field
  * @author trident
  */
 @SuppressWarnings("serial")

@@ -11,12 +11,17 @@ import com.trident.crypto.field.element.FiniteFieldElement;
 import com.trident.crypto.field.operator.FiniteFieldElementArithmetics;
 import java.math.BigInteger;
 
+
+/**
+ * for elliptic curves over prime finite fields the 
+ * y^2 = x^3 + ax +b mod p equation is used
+ * @author trident
+ */
 public class ECOverPFArithmetics extends EllipticCurveArithmetics{
     
     public ECOverPFArithmetics(EllipticCurve ellipticCurve) {
         super(ellipticCurve);
     }
-    
     
     @Override
     public EllipticCurvePoint add(EllipticCurvePoint p1, EllipticCurvePoint p2){
@@ -35,21 +40,18 @@ public class ECOverPFArithmetics extends EllipticCurveArithmetics{
     public EllipticCurvePoint mul(BigInteger times, EllipticCurvePoint p1){
         if(times.compareTo(BigInteger.ZERO) == 0)
             throw new RuntimeException("multiply to zero");
-        
         if(times.compareTo(BigInteger.ONE) == 0)
             return p1;
         
         boolean isOdd = times.testBit(0);
-        
         if(isOdd){
             times = times.subtract(BigInteger.ONE);
         }
         
         EllipticCurvePoint tmp = EllipticCurvePoint.create(p1.getPointX(), p1.getPointY());
-        // while times is bigger than 1
         while (times.compareTo(BigInteger.ONE)>0) {   
             tmp = doub(tmp);
-            times = times.shiftRight(1); // times = times/2
+            times = times.shiftRight(1);
         }
         return isOdd?add(tmp, p1):tmp;
     }
@@ -57,7 +59,6 @@ public class ECOverPFArithmetics extends EllipticCurveArithmetics{
     @Override
     public EllipticCurvePoint doub(EllipticCurvePoint p1){
         FiniteFieldElementArithmetics f = ellipticCurve.getFieldArithmetics();
-        
         FiniteFieldElement dy = f.add(f.mul(f.mul(f.getElementFactory().createFrom(new BigInteger("3")),p1.getPointX()),p1.getPointX()),ellipticCurve.getA());
         FiniteFieldElement dx = f.mul(f.getElementFactory().createFrom(new BigInteger("2")),p1.getPointY());
         FiniteFieldElement m  = f.mul(dy, f.inv(dx));

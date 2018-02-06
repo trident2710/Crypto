@@ -18,10 +18,15 @@ package com.trident.crypto.field.element;
 import java.math.BigInteger;
 
 /**
- *
+ * factory for creating finite field elements
  * @author trident
  */
 public class FiniteFieldElementFactory {
+    /**
+     * create the finite field element from BigInteger representation
+     * @param value
+     * @return 
+     */
     public FiniteFieldElement createFrom(BigInteger value){
         if(value.signum()<0) throw new RuntimeException("biginteger should not be negative");
         return new FiniteFieldElement(value);

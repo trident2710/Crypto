@@ -25,7 +25,7 @@ import com.trident.crypto.field.element.FiniteFieldElementFactory;
 import java.math.BigInteger;
 
 /**
- *
+ * arithmetics of elements in prime field
  * @author trident
  */
 public abstract class FiniteFieldElementArithmetics{
@@ -97,6 +97,13 @@ public abstract class FiniteFieldElementArithmetics{
         return "Arithmetics defined over field:"+getField();
     }
     
+    /**
+     * static factory method to create the arithmetics based on order
+     * if fieldOrder instanceof BigInteger -> creates PrimeFieldElementArithmetics
+     * if fieldOrder instanceof BinaryExtensionFieldElement -> creates BinaryExtensionFieldElementArithmetics
+     * @param fieldOrder
+     * @return 
+     */
     public static FiniteFieldElementArithmetics createFieldElementArithmetics(BigInteger fieldOrder){
         if(fieldOrder instanceof BinaryExtensionFieldElement) return createFieldElementArithmetics((BinaryExtensionFieldElement)fieldOrder);
         return new PrimeFieldElementArithmetics(new PrimeField(fieldOrder), new FiniteFieldElementFactory());

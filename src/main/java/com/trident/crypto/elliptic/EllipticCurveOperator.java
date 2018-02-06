@@ -18,7 +18,7 @@ package com.trident.crypto.elliptic;
 import java.math.BigInteger;
 
 /**
- *
+ * defines the operations on elliptic curve point
  * @author trident
  */
 public interface EllipticCurveOperator {
@@ -42,7 +42,7 @@ public interface EllipticCurveOperator {
     
     /**
      * double provided point,
-     * i.e. calculate Q = 2*P;
+     * i.e. calculate Q = 2P;
      * @param p1 - point of the elliptic curve
      * @return Q = 2*P
      */

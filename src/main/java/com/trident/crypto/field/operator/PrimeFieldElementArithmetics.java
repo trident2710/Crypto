@@ -38,12 +38,12 @@ class PrimeFieldElementArithmetics extends FiniteFieldElementArithmetics{
 
     @Override
     public FiniteFieldElement sub(FiniteFieldElement el1, FiniteFieldElement el2) {
-        return mod(getElementFactory().createFrom(el1.subtract(el2)));
+        return mod(getElementFactory().createFrom(el1.add(el2.multiply(BigInteger.valueOf(-1)).mod(getField().getOrderP()))));
     }
 
     @Override
     public FiniteFieldElement mul(FiniteFieldElement el1, FiniteFieldElement el2) throws MultiplicativeGroupException{
-        if(el1.equals(BigInteger.ZERO)||el2.equals(BigInteger.ZERO)) throw new MultiplicativeGroupException();
+        if(el1.equals(BigInteger.ZERO)||el2.equals(BigInteger.ZERO)) return getElementFactory().createFrom(BigInteger.ZERO);
         return mod(getElementFactory().createFrom(el1.multiply(el2)));
     }
 
@@ -57,4 +57,5 @@ class PrimeFieldElementArithmetics extends FiniteFieldElementArithmetics{
     public FiniteFieldElement mod(FiniteFieldElement el1) {
         return getElementFactory().createFrom(el1.mod(getField().getOrderP()));
     }
+    
 }

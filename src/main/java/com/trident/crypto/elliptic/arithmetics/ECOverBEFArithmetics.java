@@ -22,7 +22,8 @@ import com.trident.crypto.field.operator.FiniteFieldElementArithmetics;
 import java.math.BigInteger;
 
 /**
- *
+ * for elliptic curves over prime finite fields the 
+ * y^2 +xy = x^3 +ax^2 + b equation is used
  * @author trident
  */
 public class ECOverBEFArithmetics extends EllipticCurveArithmetics{
@@ -77,6 +78,11 @@ public class ECOverBEFArithmetics extends EllipticCurveArithmetics{
         return EllipticCurvePoint.create(p3x, p3y);
     }
 
+    /**
+     * 
+     * @param p1 - elliptic curve point
+     * @return true if y^2 +xy = x^3 +ax^2 + b for p1
+     */
     @Override
     public boolean belongsTo(EllipticCurvePoint p1) {
         FiniteFieldElementArithmetics f = ellipticCurve.getFieldArithmetics();

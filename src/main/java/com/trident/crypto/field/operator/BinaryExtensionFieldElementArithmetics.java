@@ -24,7 +24,7 @@ import com.trident.crypto.util.Tuple;
 import java.math.BigInteger;
 
 /**
- *
+ * arithmetics of elements in binary extension field
  * @author trident
  */
 class BinaryExtensionFieldElementArithmetics extends FiniteFieldElementArithmetics{

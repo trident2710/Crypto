@@ -1,7 +1,7 @@
 package field;
 
 
-import com.trident.crypto.elliptic.nist.NistEC;
+import com.trident.crypto.elliptic.nist.SECP;
 import com.trident.crypto.field.element.BinaryExtensionFieldElement;
 import com.trident.crypto.field.element.FiniteFieldElement;
 import com.trident.crypto.field.exception.MultiplicativeGroupException;
@@ -43,7 +43,7 @@ public class BinaryExtensionFieldArithmeticsTest {
     public void init(){
         random = new Random();
         times = 10000;
-        irreduciblePoly = BinaryExtensionFieldElement.fromString(NistEC.SECT113R1.getP());
+        irreduciblePoly = BinaryExtensionFieldElement.fromString(SECP.SECT113R1.getP());
         arithmetics = FiniteFieldElementArithmetics.createFieldElementArithmetics(irreduciblePoly);
         System.out.println(arithmetics.getField());
 

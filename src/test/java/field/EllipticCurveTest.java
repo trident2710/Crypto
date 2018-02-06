@@ -17,7 +17,7 @@ package field;
 
 import com.trident.crypto.elliptic.arithmetics.EllipticCurveArithmetics;
 import com.trident.crypto.elliptic.EllipticCurvePoint;
-import com.trident.crypto.elliptic.nist.NistEC;
+import com.trident.crypto.elliptic.nist.SECP;
 import java.math.BigInteger;
 import java.util.Random;
 import junit.framework.Assert;
@@ -31,35 +31,36 @@ import org.junit.Test;
 public class EllipticCurveTest {
     private int times;
     private Random random;
-    private EllipticCurveArithmetics ar;
     
     @Before
     public void init(){
         random = new Random();
         times = 1<<10;
-        ar = EllipticCurveArithmetics.createFrom(NistEC.values()[random.nextInt(NistEC.values().length)]);
-        System.out.println(ar);
     }
     
     @Test
     public void testPointOperations(){
-        EllipticCurvePoint p = ar.getEllipticCurve().getG();
+        for(int j = 0;j<SECP.values().length;j++){
+            EllipticCurveArithmetics ar = EllipticCurveArithmetics.createFrom(SECP.values()[j]);
+            EllipticCurvePoint p = ar.getEllipticCurve().getG();
+            System.out.println(ar);
         
-        for(int i=0;i<times;i++){
-            p = ar.doub(p);
-            Assert.assertTrue(ar.belongsTo(p));
-        }
-        
-        for(int i=0;i<times;i++){
-            EllipticCurvePoint doub = ar.doub(p);
-            p = ar.add(p,p);
-            Assert.assertTrue(ar.belongsTo(p)&&p.equals(doub));
-        }
-        
-        for(int i=0;i<times;i++){
-            EllipticCurvePoint doub = ar.doub(p);
-            p = ar.mul(new BigInteger("2"), p);
-            Assert.assertTrue(ar.belongsTo(p)&&p.equals(doub));
-        }
+            for(int i=0;i<times;i++){
+                p = ar.doub(p);
+                Assert.assertTrue(ar.belongsTo(p));
+            }
+
+            for(int i=0;i<times;i++){
+                EllipticCurvePoint doub = ar.doub(p);
+                p = ar.add(p,p);
+                Assert.assertTrue(ar.belongsTo(p)&&p.equals(doub));
+            }
+
+            for(int i=0;i<times;i++){
+                EllipticCurvePoint doub = ar.doub(p);
+                p = ar.mul(new BigInteger("2"), p);
+                Assert.assertTrue(ar.belongsTo(p)&&p.equals(doub));
+            }
+        }    
     }   
 }
