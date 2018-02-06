@@ -25,6 +25,7 @@ public class BinaryExtensionFieldElementFactory extends FiniteFieldElementFactor
     
     @Override
     public BinaryExtensionFieldElement createFrom(BigInteger value){
+        if(value.signum()<0) throw new RuntimeException("biginteger should not be negative");
         return new BinaryExtensionFieldElement(value);
     }
 }

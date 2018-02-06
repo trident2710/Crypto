@@ -15,7 +15,7 @@
  */
 package com.trident.crypto.field;
 
-import com.trident.crypto.field.element.IrreduciblePoly;
+import com.trident.crypto.field.element.BinaryExtensionFieldElement;
 import java.math.BigInteger;
 
 /**
@@ -25,9 +25,9 @@ import java.math.BigInteger;
 public class BinaryExtensionField extends FiniteField{
     
     private final int  orderQ; // order exponent
-    private final IrreduciblePoly irreduciblePoly; // irreducible polynom
+    private final BinaryExtensionFieldElement irreduciblePoly; // irreducible polynom
     
-    public BinaryExtensionField(IrreduciblePoly irreduciblePoly) {
+    public BinaryExtensionField(BinaryExtensionFieldElement irreduciblePoly) {
         super(new BigInteger("2"),new BigInteger("2").pow(irreduciblePoly.getDegree()));
         this.orderQ = irreduciblePoly.getDegree();
         this.irreduciblePoly = irreduciblePoly;
@@ -37,7 +37,7 @@ public class BinaryExtensionField extends FiniteField{
         return orderQ;
     }
 
-    public IrreduciblePoly getIrreduciblePoly() {
+    public BinaryExtensionFieldElement getIrreduciblePoly() {
         return irreduciblePoly;
     }
     

@@ -18,10 +18,10 @@ package com.trident.crypto.field.operator;
 import com.trident.crypto.field.BinaryExtensionField;
 import com.trident.crypto.field.FiniteField;
 import com.trident.crypto.field.PrimeField;
+import com.trident.crypto.field.element.BinaryExtensionFieldElement;
 import com.trident.crypto.field.element.BinaryExtensionFieldElementFactory;
 import com.trident.crypto.field.element.FiniteFieldElement;
 import com.trident.crypto.field.element.FiniteFieldElementFactory;
-import com.trident.crypto.field.element.IrreduciblePoly;
 import java.math.BigInteger;
 
 /**
@@ -94,14 +94,15 @@ public abstract class FiniteFieldElementArithmetics{
     
     @Override
     public String toString(){
-        return "Arithmetics defined over field: "+getField();
+        return "Arithmetics defined over field:"+getField();
     }
     
     public static FiniteFieldElementArithmetics createFieldElementArithmetics(BigInteger fieldOrder){
+        if(fieldOrder instanceof BinaryExtensionFieldElement) return createFieldElementArithmetics((BinaryExtensionFieldElement)fieldOrder);
         return new PrimeFieldElementArithmetics(new PrimeField(fieldOrder), new FiniteFieldElementFactory());
     }
     
-    public static FiniteFieldElementArithmetics createFieldElementArithmetics(IrreduciblePoly fieldIrreduciblePoly){
+    public static FiniteFieldElementArithmetics createFieldElementArithmetics(BinaryExtensionFieldElement fieldIrreduciblePoly){
         return new BinaryExtensionFieldElementArithmetics(new BinaryExtensionField(fieldIrreduciblePoly), new BinaryExtensionFieldElementFactory());
     }
 }

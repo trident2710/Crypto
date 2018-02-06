@@ -23,6 +23,7 @@ import java.math.BigInteger;
  */
 public class FiniteFieldElementFactory {
     public FiniteFieldElement createFrom(BigInteger value){
+        if(value.signum()<0) throw new RuntimeException("biginteger should not be negative");
         return new FiniteFieldElement(value);
     }
 }

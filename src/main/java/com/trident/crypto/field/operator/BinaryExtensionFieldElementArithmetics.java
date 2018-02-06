@@ -78,10 +78,11 @@ class BinaryExtensionFieldElementArithmetics extends FiniteFieldElementArithmeti
         if(el1.equals(BigInteger.ZERO)||el2.equals(BigInteger.ZERO)) return getElementFactory().createFrom(BigInteger.ZERO);
         el1 = mod(el1);
         el2 = mod(el2);
+        BigInteger el2b = el2;
         BigInteger product = BigInteger.ZERO;
         for(int i=0;i<=el1.getDegree();i++){
-            boolean has = el1.and(new BigInteger(Integer.toString(1<<i))).compareTo(BigInteger.ZERO)>0;
-            if(has) product = product.xor(getElementFactory().createFrom(el2.shiftLeft(i)));
+            if(el1.testBit(i)) product = product.xor(el2b); 
+            el2b = el2b.shiftLeft(1);
         }
         return mod(getElementFactory().createFrom(product));
     }
@@ -94,7 +95,7 @@ class BinaryExtensionFieldElementArithmetics extends FiniteFieldElementArithmeti
         FiniteFieldElement t = getElementFactory().createFrom(BigInteger.ZERO);
         FiniteFieldElement nt = getElementFactory().createFrom(BigInteger.ONE);
         FiniteFieldElement r = irreduciblePoly;
-        FiniteFieldElement nr = el1;
+        FiniteFieldElement nr = getElementFactory().createFrom(el1);
         
         while (nr.compareTo(BigInteger.ZERO)>0) {      
             FiniteFieldElement q = divEuclid(r,nr).getV();
