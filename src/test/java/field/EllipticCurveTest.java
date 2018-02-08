@@ -15,9 +15,15 @@
  */
 package field;
 
+import com.trident.crypto.elliptic.EllipticCurve;
+import com.trident.crypto.elliptic.EllipticCurveOperator;
 import com.trident.crypto.elliptic.arithmetics.EllipticCurveArithmetics;
 import com.trident.crypto.elliptic.EllipticCurvePoint;
+import com.trident.crypto.elliptic.arithmetics.ECOverPFArithmetics;
+import com.trident.crypto.elliptic.arithmetics.PointAtInfinityArithmeticsDecorator;
 import com.trident.crypto.elliptic.nist.SECP;
+import com.trident.crypto.field.element.FiniteFieldElement;
+import com.trident.crypto.field.operator.FiniteFieldElementArithmetics;
 import java.math.BigInteger;
 import java.util.Random;
 import junit.framework.Assert;
@@ -41,10 +47,11 @@ public class EllipticCurveTest {
     @Test
     public void testPointOperations(){
         for(int j = 0;j<SECP.values().length;j++){
-            EllipticCurveArithmetics ar = EllipticCurveArithmetics.createFrom(SECP.values()[j]);
+            EllipticCurveOperator ar = EllipticCurveArithmetics.createFrom(SECP.values()[j]);
             EllipticCurvePoint p = ar.getEllipticCurve().getG();
+            BigInteger n = ar.getEllipticCurve().getN();
             System.out.println(ar);
-        
+            
             for(int i=0;i<times;i++){
                 p = ar.doub(p);
                 Assert.assertTrue(ar.belongsTo(p));
@@ -63,4 +70,61 @@ public class EllipticCurveTest {
             }
         }    
     }   
+    
+    
+    @Test
+    public void testSymmetry(){
+        for(int j = 0;j<SECP.values().length;j++){
+            EllipticCurveOperator ar = EllipticCurveArithmetics.createFrom(SECP.values()[j]);
+            System.out.println(ar);
+            EllipticCurvePoint p = ar.getEllipticCurve().getG();
+            EllipticCurvePoint p31= ar.add(ar.add(p, p),p);
+            EllipticCurvePoint p32= ar.mul(new BigInteger("3"), p);
+            EllipticCurvePoint p33= ar.add(ar.doub(p),p);
+            
+            Assert.assertEquals(p31, p32);
+            Assert.assertEquals(p32, p33);
+        }
+    }
+    
+    
+    @Test
+    public void testPointOnInfinity(){
+        for(int j = 0;j<SECP.values().length;j++){
+            EllipticCurveOperator ar = EllipticCurveArithmetics.createFrom(SECP.values()[j]);
+            EllipticCurvePoint G = ar.getEllipticCurve().getG();
+            EllipticCurvePoint nG = ar.mul(ar.getEllipticCurve().getN(), G);
+            EllipticCurvePoint notG = ar.negate(G);
+            EllipticCurvePoint inf = ar.add(G, notG);
+            EllipticCurvePoint minf = ar.mul(new BigInteger("42"), inf);
+            EllipticCurvePoint ainf = ar.add(inf, inf);
+            EllipticCurvePoint ninf = ar.negate(inf);
+            EllipticCurvePoint pinf = ar.add(inf, G);
+            
+            Assert.assertTrue(!G.equals(EllipticCurvePoint.POINT_ON_INFINITY));
+            Assert.assertTrue(nG.equals(EllipticCurvePoint.POINT_ON_INFINITY));
+            Assert.assertTrue(!notG.equals(EllipticCurvePoint.POINT_ON_INFINITY));
+            Assert.assertTrue(inf.equals(EllipticCurvePoint.POINT_ON_INFINITY));
+            Assert.assertTrue(minf.equals(EllipticCurvePoint.POINT_ON_INFINITY));
+            Assert.assertTrue(ainf.equals(EllipticCurvePoint.POINT_ON_INFINITY));
+            Assert.assertTrue(ninf.equals(EllipticCurvePoint.POINT_ON_INFINITY));
+            Assert.assertTrue(!pinf.equals(EllipticCurvePoint.POINT_ON_INFINITY));
+        }
+    }
+    
+    
+    @Test
+    public void testCustomEC(){
+        FiniteFieldElementArithmetics fa = FiniteFieldElementArithmetics.createFieldElementArithmetics(BigInteger.valueOf(17));
+        FiniteFieldElement a = fa.getElementFactory().createFrom(BigInteger.valueOf(2));
+        FiniteFieldElement b = fa.getElementFactory().createFrom(BigInteger.valueOf(3));
+        EllipticCurvePoint ecp = EllipticCurvePoint.create(fa.getElementFactory().createFrom(BigInteger.valueOf(3)), fa.getElementFactory().createFrom(BigInteger.valueOf(6)));
+        EllipticCurve ec = new EllipticCurve(fa, a, b, ecp, BigInteger.ONE, BigInteger.ONE);
+        EllipticCurveOperator op = new PointAtInfinityArithmeticsDecorator(new ECOverPFArithmetics(ec));
+        
+        
+        for(int j = 1;j<20;j++){
+            System.out.println(op.mul(BigInteger.valueOf(j), op.getEllipticCurve().getG()));
+        }
+    }
 }

@@ -95,6 +95,17 @@ public class BinaryExtensionFieldArithmeticsTest {
         }   
     }
     
+    @Test
+    public void testComplement(){
+        for(int i=0;i<times;i++){
+            BinaryExtensionFieldElement x = (BinaryExtensionFieldElement)arithmetics.getElementFactory().createFrom(new BigInteger(irreduciblePoly.getDegree(),random));
+            if(!(arithmetics.mod(x).equals(BigInteger.ZERO))){
+                BinaryExtensionFieldElement res = (BinaryExtensionFieldElement)arithmetics.complement(x);
+                Assert.assertTrue(arithmetics.add(res, x).equals(BigInteger.ZERO));
+            }   
+        }   
+    }
+    
     @Test(expected = MultiplicativeGroupException.class)
     public void testInvMultiplicativeException(){
         BigInteger x = BigInteger.ZERO;

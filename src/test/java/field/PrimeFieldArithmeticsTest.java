@@ -94,6 +94,16 @@ public class PrimeFieldArithmeticsTest {
         } 
     }
     
+    @Test
+    public void testComplement(){
+        for(int i=0;i<times;i++){
+            BigInteger x = new BigInteger(Integer.toString(random.nextInt(generator)));
+            BigInteger res = x.negate().mod(biGenerator);
+            BigInteger lres = arithmetics.complement(arithmetics.getElementFactory().createFrom(x));
+            Assert.assertEquals(res.compareTo(lres),0);
+        } 
+    }
+    
     @Test(expected = MultiplicativeGroupException.class)
     public void testMulMultiplicativeException(){
         BigInteger x = BigInteger.ZERO;
