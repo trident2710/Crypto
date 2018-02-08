@@ -25,35 +25,14 @@ public class ECOverPFArithmetics extends EllipticCurveArithmetics{
     
     @Override
     public EllipticCurvePoint add(EllipticCurvePoint p1, EllipticCurvePoint p2){
-        if(Math.abs(p1.compareTo(p2))==0) return doub(p1);
-        FiniteFieldElementArithmetics f = ellipticCurve.getFieldArithmetics();
-            
+        if(p1.equals(p2)) return doub(p1);
+        FiniteFieldElementArithmetics f = ellipticCurve.getFieldArithmetics();  
         FiniteFieldElement dy = f.sub(p2.getPointY(), p1.getPointY()); //p2.y - p1.y
         FiniteFieldElement dx = f.sub(p2.getPointX(), p1.getPointX()); //p2.x - p1.x 
         FiniteFieldElement m  = f.mul(dy, f.inv(dx)); // dy/dx
         FiniteFieldElement p3x = f.sub(f.sub(f.mul(m, m),p1.getPointX()),p2.getPointX()); // m^2 - p1.x - p2.x
         FiniteFieldElement p3y = f.sub(f.mul(m, f.sub(p1.getPointX(), p3x)),p1.getPointY()); // m*(p1.x -p3.x) - p1.y
         return EllipticCurvePoint.create(p3x, p3y);
-    }
-    
-    @Override
-    public EllipticCurvePoint mul(BigInteger times, EllipticCurvePoint p1){
-        if(times.compareTo(BigInteger.ZERO) == 0)
-            throw new RuntimeException("multiply to zero");
-        if(times.compareTo(BigInteger.ONE) == 0)
-            return p1;
-        
-        boolean isOdd = times.testBit(0);
-        if(isOdd){
-            times = times.subtract(BigInteger.ONE);
-        }
-        
-        EllipticCurvePoint tmp = EllipticCurvePoint.create(p1.getPointX(), p1.getPointY());
-        while (times.compareTo(BigInteger.ONE)>0) {   
-            tmp = doub(tmp);
-            times = times.shiftRight(1);
-        }
-        return isOdd?add(tmp, p1):tmp;
     }
     
     @Override
@@ -81,5 +60,12 @@ public class ECOverPFArithmetics extends EllipticCurveArithmetics{
         FiniteFieldElement res = f.add(f.add(x3, ax),getEllipticCurve().getB()); // x^3+ax+b
         return y2.equals(res);
     }
+    
+    @Override
+    public EllipticCurvePoint negate(EllipticCurvePoint p1) {
+        FiniteFieldElementArithmetics f = ellipticCurve.getFieldArithmetics();
+        return EllipticCurvePoint.create(p1.getPointX(), f.complement(p1.getPointY()));
+    }
+
 }
 

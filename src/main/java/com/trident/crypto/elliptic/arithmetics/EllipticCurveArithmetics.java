@@ -17,7 +17,9 @@ package com.trident.crypto.elliptic.arithmetics;
 
 import com.trident.crypto.elliptic.EllipticCurve;
 import com.trident.crypto.elliptic.EllipticCurveOperator;
+import com.trident.crypto.elliptic.EllipticCurvePoint;
 import com.trident.crypto.elliptic.nist.SECP;
+import java.math.BigInteger;
 
 /**
  *
@@ -34,6 +36,7 @@ public abstract class EllipticCurveArithmetics implements EllipticCurveOperator{
         this.ellipticCurve = ellipticCurve;
     }
     
+    @Override
     public EllipticCurve getEllipticCurve() {
         return ellipticCurve;
     }
@@ -46,10 +49,10 @@ public abstract class EllipticCurveArithmetics implements EllipticCurveOperator{
      * @param spec
      * @return 
      */
-    public static EllipticCurveArithmetics createFrom(SECP spec){
-        return spec.getType()?
+    public static EllipticCurveOperator createFrom(SECP spec){
+        return new PointAtInfinityArithmeticsDecorator(spec.getType()?
                 new ECOverPFArithmetics(EllipticCurve.createFrom(spec)):
-                new ECOverBEFArithmetics(EllipticCurve.createFrom(spec));
+                new ECOverBEFArithmetics(EllipticCurve.createFrom(spec)));
     }
     
     /**
@@ -59,5 +62,33 @@ public abstract class EllipticCurveArithmetics implements EllipticCurveOperator{
     @Override
     public String toString(){
         return new StringBuilder().append("Elliptic curve arithmetics defined over:\n").append(getEllipticCurve()).toString();
+    }
+       
+    @Override
+    public EllipticCurvePoint mul(BigInteger times, EllipticCurvePoint p1){
+        if(times.signum()==-1) throw new RuntimeException("negative times");
+        if(times.compareTo(BigInteger.ZERO) == 0)
+            throw new RuntimeException("multiply to zero");
+        if(times.compareTo(BigInteger.ONE) == 0)
+            return p1;
+        
+        EllipticCurvePoint temp = EllipticCurvePoint.create(p1.getPointX(), p1.getPointY());
+        times = times.subtract(BigInteger.ONE);
+        while (times.compareTo(BigInteger.ZERO)>0){
+            if (times.testBit(0)){
+                if (temp.equals(p1))
+                    temp = doub(temp);
+                else{
+                    if(temp.equals(negate(p1))) // if adding p + (-p)
+                        temp = EllipticCurvePoint.POINT_ON_INFINITY;
+                    else
+                        temp = add(temp,p1);
+                }   
+                times = times.subtract(BigInteger.ONE);
+            }
+            times = times.shiftRight(1);
+            p1 = doub(p1);
+        }
+        return temp;
     }
 }
