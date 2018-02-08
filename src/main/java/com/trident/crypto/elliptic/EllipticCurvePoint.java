@@ -18,7 +18,7 @@ import com.trident.crypto.field.element.FiniteFieldElement;
 import java.util.Objects;
 
 
-public class EllipticCurvePoint implements Comparable<EllipticCurvePoint>{
+public class EllipticCurvePoint{
     
     /**
      * X coordinate of the point
@@ -29,6 +29,8 @@ public class EllipticCurvePoint implements Comparable<EllipticCurvePoint>{
      * Y coordinate of the point
      */
     private final FiniteFieldElement pointY;
+    
+    public static final EllipticCurvePoint POINT_ON_INFINITY = new PointOnInfinity();
 
     private EllipticCurvePoint(FiniteFieldElement pointX, FiniteFieldElement pointY) {
         this.pointX = pointX;
@@ -45,23 +47,14 @@ public class EllipticCurvePoint implements Comparable<EllipticCurvePoint>{
     
     @Override
     public String toString(){
+        if(this instanceof PointOnInfinity) return "Point on infinity";
+        
         return "X:"+pointX+"; Y:"+pointY;
     }
-    
-    /**
-     * compares the coordinates of 2 points of the elliptic curve
-     * @param o - point which this point is compared with
-     * @return 0 if they have the same coordinates
-     *         +-1 if they have one same coordinate
-     *         +-2 if they have different coordinates
-     */
-    @Override
-    public int compareTo(EllipticCurvePoint o) {
-        return o.getPointX().compareTo(this.getPointX())+o.getPointY().compareTo(o.getPointY());
-    }
-    
+        
     @Override
     public boolean equals(Object other){
+        if(other instanceof PointOnInfinity) return this instanceof PointOnInfinity;
         if(other == this) return true;
         if(other == null) return false;
         if(!(other instanceof EllipticCurvePoint)) return false;
@@ -88,4 +81,10 @@ public class EllipticCurvePoint implements Comparable<EllipticCurvePoint>{
     }
     
     
+    private static final class PointOnInfinity extends EllipticCurvePoint{
+        private PointOnInfinity() {
+            super(null, null);
+        }
+    };
+     
 }

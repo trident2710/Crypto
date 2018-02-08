@@ -55,4 +55,17 @@ public interface EllipticCurveOperator {
      */
     boolean belongsTo(EllipticCurvePoint p1);
     
+    /**
+     * negate the point, i.e. return -P
+     * @param p1
+     * @return -p1
+     */
+    EllipticCurvePoint negate(EllipticCurvePoint p1);
+    
+    /**
+     * return elliptic curve over which the operations are performed
+     * @return 
+     */
+    EllipticCurve getEllipticCurve();
+    
 }
