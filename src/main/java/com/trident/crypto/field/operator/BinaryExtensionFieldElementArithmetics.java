@@ -113,4 +113,9 @@ class BinaryExtensionFieldElementArithmetics extends FiniteFieldElementArithmeti
     public FiniteFieldElement mod(FiniteFieldElement el1) {
         return divEuclid(el1,irreduciblePoly).getK();
     }  
+
+    @Override
+    public FiniteFieldElement complement(FiniteFieldElement el1) {
+        return mod(el1);
+    }
 }

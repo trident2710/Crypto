@@ -38,7 +38,7 @@ class PrimeFieldElementArithmetics extends FiniteFieldElementArithmetics{
 
     @Override
     public FiniteFieldElement sub(FiniteFieldElement el1, FiniteFieldElement el2) {
-        return mod(getElementFactory().createFrom(el1.add(el2.multiply(BigInteger.valueOf(-1)).mod(getField().getOrderP()))));
+        return mod(getElementFactory().createFrom(el1.add(complement(el2))));
     }
 
     @Override
@@ -56,6 +56,11 @@ class PrimeFieldElementArithmetics extends FiniteFieldElementArithmetics{
     @Override
     public FiniteFieldElement mod(FiniteFieldElement el1) {
         return getElementFactory().createFrom(el1.mod(getField().getOrderP()));
+    }
+
+    @Override
+    public FiniteFieldElement complement(FiniteFieldElement el1) {
+        return getElementFactory().createFrom(el1.negate().mod(getField().getOrderP()));
     }
     
 }

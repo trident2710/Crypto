@@ -77,6 +77,13 @@ public abstract class FiniteFieldElementArithmetics{
     public abstract FiniteFieldElement mod(FiniteFieldElement el1); 
     
     /**
+     * return the element x such that el1 + x = 0 mod order
+     * @param el1
+     * @return 
+     */
+    public abstract FiniteFieldElement complement(FiniteFieldElement el1);
+    
+    /**
      * 
      * @return the field over which this arithmetics is performed
      */
