@@ -22,11 +22,15 @@ import java.util.Random;
 
 
 /**
- *
+ * implements EDSA (elliptic curve digital signature algorithm)
  * @author trident
  */
 public class ECDSA {
     
+    /**
+     * arithmetics over the elliptic curve 
+     * @see EllipticCurveArithmetics
+     */
     private final EllipticCurveOperator operator;
     private final Random random;
     
@@ -35,12 +39,25 @@ public class ECDSA {
         this.random = new Random();
     }
     
+    /**
+     * generate key pair i.e. secret and public
+     * such that 
+     * secret = b (random BigInteger)
+     * public  = Q = b*G (product of generator point of the elliptic curve on b)
+     * @return 
+     */
     public ECDSAKey generateKeyPair(){
         BigInteger sKey = new BigInteger(getOperator().getEllipticCurve().getN().bitLength(), random);
         EllipticCurvePoint pKey = getOperator().mul(sKey, getOperator().getEllipticCurve().getG());
         return new ECDSAKey(sKey,pKey);
     }
     
+    /**
+     * returns the digital signature 
+     * @param mHash - hash of the plain message M, produced using hash function such as SHA-256
+     * @param sKey - secret key of the key pair
+     * @return hexadecimal string, digital signature of mHash
+     */
     public String sign(byte[] mHash, BigInteger sKey){
         BigInteger n = getOperator().getEllipticCurve().getN();
         EllipticCurvePoint G = getOperator().getEllipticCurve().getG();
@@ -65,6 +82,13 @@ public class ECDSA {
         return padding(r.toString(16),len16(n))+padding(s.toString(16),len16(n));
     }
     
+    /**
+     * verify that provided signature corresponds to the provided hash
+     * @param mHash - hash of the plain message M, produced using hash function such as SHA-256
+     * @param pKey - public key of the key pair
+     * @param signature - hexadecimal string, digital signature of mHash
+     * @return if the signature is verified
+     */
     public boolean verify(byte[] mHash, EllipticCurvePoint pKey, String signature){
         BigInteger n = getOperator().getEllipticCurve().getN();
         EllipticCurvePoint G = getOperator().getEllipticCurve().getG();

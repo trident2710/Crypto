@@ -19,11 +19,18 @@ import com.trident.crypto.elliptic.EllipticCurvePoint;
 import java.math.BigInteger;
 
 /**
- *
+ * represents key pair in ECDSA
  * @author trident
  */
 public class ECDSAKey {
+    /**
+     * secret key b -> random BigInteger
+     */
     private final BigInteger keySec;
+    
+    /**
+     * public key Q = b*G (product of generator point of elliptic curve and secret)
+     */
     private final EllipticCurvePoint keyPub;
 
     public ECDSAKey(BigInteger keySec, EllipticCurvePoint keyPub) {
