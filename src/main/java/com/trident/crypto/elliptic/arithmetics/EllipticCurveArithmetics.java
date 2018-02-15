@@ -31,7 +31,7 @@ public abstract class EllipticCurveArithmetics implements EllipticCurveOperator{
     
     //olliptic curve over which this arithmetics is defined
     protected final EllipticCurve ellipticCurve;
-
+    
     public EllipticCurveArithmetics(EllipticCurve ellipticCurve) {
         this.ellipticCurve = ellipticCurve;
     }

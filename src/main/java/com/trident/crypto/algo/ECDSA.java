@@ -15,6 +15,8 @@
  */
 package com.trident.crypto.algo;
 
+import com.trident.crypto.algo.mpmbehavior.MPMBehavior;
+import com.trident.crypto.algo.mpmbehavior.MPMStandardBehavior;
 import com.trident.crypto.elliptic.EllipticCurveOperator;
 import com.trident.crypto.elliptic.EllipticCurvePoint;
 import java.math.BigInteger;
@@ -32,11 +34,22 @@ public class ECDSA {
      * @see EllipticCurveArithmetics
      */
     private final EllipticCurveOperator operator;
-    private final Random random;
     
-    public ECDSA(EllipticCurveOperator operator){
+    /**
+     * multiple point multiplication calculation strategy
+     */
+    private MPMBehavior mpmBehavior;
+    
+    private final Random random;
+        
+    public ECDSA(EllipticCurveOperator operator, MPMBehavior behavior){
         this.operator = operator;
         this.random = new Random();
+        this.mpmBehavior = behavior;
+    }
+    
+    public ECDSA(EllipticCurveOperator operator){
+        this(operator, new MPMStandardBehavior(operator));
     }
     
     /**
@@ -107,9 +120,7 @@ public class ECDSA {
         BigInteger z1 = (s.multiply(v)).mod(n);
         BigInteger z2 = n.add(r.multiply(v).negate()).mod(n);
         
-        EllipticCurvePoint A = getOperator().mul(z1, G);
-        EllipticCurvePoint B = getOperator().mul(z2, pKey);
-        EllipticCurvePoint C = getOperator().add(A, B);
+        EllipticCurvePoint C = mpmBehavior.mpm(z1, z2, G, pKey);
         BigInteger R = C.getPointX().mod(n);
         
         return R.equals(r);
@@ -135,4 +146,13 @@ public class ECDSA {
         }
         return sb.reverse().toString();
     }
+
+    public MPMBehavior getMpmBehavior() {
+        return mpmBehavior;
+    }
+
+    public void setMpmBehavior(MPMBehavior mpmBehavior) {
+        if(mpmBehavior == null) throw new RuntimeException("should not be null");
+        this.mpmBehavior = mpmBehavior;
+    }  
 }
