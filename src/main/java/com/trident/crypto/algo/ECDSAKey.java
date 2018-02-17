@@ -17,6 +17,7 @@ package com.trident.crypto.algo;
 
 import com.trident.crypto.elliptic.EllipticCurvePoint;
 import java.math.BigInteger;
+import java.util.Objects;
 
 /**
  * represents key pair in ECDSA
@@ -50,8 +51,39 @@ public class ECDSAKey {
     public String toString(){
         StringBuilder sb = new StringBuilder();
         sb.append("Secret: ").append(keySec.toString(16)).append("\n");
-        sb.append("Public: ").append(keyPub.getPointX().toString(16)).append(" ; ").append(keyPub.getPointY().toString(16));
+        sb.append("Public: ").append(keyPub.getPointX().toString(16)).append(";").append(keyPub.getPointY().toString(16));
         return sb.toString();
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 89 * hash + Objects.hashCode(this.keySec);
+        hash = 89 * hash + Objects.hashCode(this.keyPub);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final ECDSAKey other = (ECDSAKey) obj;
+        if (!Objects.equals(this.keySec, other.keySec)) {
+            return false;
+        }
+        if (!Objects.equals(this.keyPub, other.keyPub)) {
+            return false;
+        }
+        return true;
+    }
+    
+
     
 }
