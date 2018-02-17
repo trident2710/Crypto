@@ -14,11 +14,11 @@ import java.io.Writer;
  *
  * @author trident
  */
-public class ECDSAKeyPairWriter extends Writer{
+public class ECDSAKeyWriter extends Writer{
     
     private final Writer writer;
     
-    public ECDSAKeyPairWriter(Writer writer){
+    public ECDSAKeyWriter(Writer writer){
         this.writer = writer;
     }
 

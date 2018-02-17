@@ -17,11 +17,11 @@ import java.math.BigInteger;
  *
  * @author trident
  */
-public class ECDSAKeyPairReader extends Reader{
+public class ECDSAKeyReader extends Reader{
     
     private final Reader reader;
     
-    public ECDSAKeyPairReader(Reader reader){
+    public ECDSAKeyReader(Reader reader){
         this.reader = reader;
     }
     

@@ -17,8 +17,8 @@ package io;
 
 import com.trident.crypto.algo.ECDSA;
 import com.trident.crypto.algo.ECDSAKey;
-import com.trident.crypto.algo.io.ECDSAKeyPairReader;
-import com.trident.crypto.algo.io.ECDSAKeyPairWriter;
+import com.trident.crypto.algo.io.ECDSAKeyReader;
+import com.trident.crypto.algo.io.ECDSAKeyWriter;
 import com.trident.crypto.elliptic.EllipticCurveOperator;
 import com.trident.crypto.elliptic.arithmetics.EllipticCurveArithmetics;
 import com.trident.crypto.elliptic.nist.SECP;
@@ -48,14 +48,14 @@ public class IOTest {
             ECDSAKey key = ecdsa.generateKeyPair();
             ECDSAKey key2 = null;
             
-            try(ECDSAKeyPairWriter writer = new ECDSAKeyPairWriter(new FileWriter(f))){
+            try(ECDSAKeyWriter writer = new ECDSAKeyWriter(new FileWriter(f))){
                 writer.write(key);
                 writer.flush();
                 writer.close();
             } catch (IOException ex) {
             }
             
-            try(ECDSAKeyPairReader reader = new ECDSAKeyPairReader(new FileReader(f))){
+            try(ECDSAKeyReader reader = new ECDSAKeyReader(new FileReader(f))){
                 key2 = reader.readECDSAKey();
                 reader.close();
             } catch (IOException ex) {
